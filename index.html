@@ -210,7 +210,7 @@
            MODALES (FENÊTRES SERVICES GOOGLE SHEETS)
         ========================================= */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             backdrop-filter: blur(10px); z-index: 2000;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: 0.4s; padding: 20px;
@@ -218,7 +218,7 @@
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
         .modal-content {
-            width: 100%; max-width: 900px; max-height: 85vh;
+            width: 100%; max-width: 1000px; max-height: 85vh;
             overflow-y: auto; padding: 40px; position: relative;
             transform: scale(0.95); transition: 0.4s;
         }
@@ -231,24 +231,57 @@
         }
         .close-modal:hover { color: var(--accent); transform: rotate(90deg); }
 
-        .modal-header-text { text-align: center; margin-bottom: 30px; }
-        .modal-header-text p { color: var(--text-muted); line-height: 1.6; margin-top: 10px;}
+        .modal-header-text {
+            text-align: center; margin-bottom: 40px; opacity: 0;
+            animation: fadeInDown 0.8s ease forwards;
+        }
+        .modal-header-text h2 {
+            font-size: 2.5rem; margin-bottom: 15px;
+            animation: slideInLeft 0.8s ease 0.2s forwards;
+            opacity: 0;
+        }
+        .modal-header-text p {
+            color: var(--text-muted); line-height: 1.8; margin-top: 10px;
+            animation: slideInRight 0.8s ease 0.4s forwards;
+            opacity: 0;
+            font-size: 1.05rem;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
         .products-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+            opacity: 0;
         }
         .product-card {
-            background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
             display: flex; flex-direction: column; justify-content: space-between;
+            transition: all 0.4s ease;
+            transform: translateY(20px);
         }
-        .product-card h4 { font-size: 1.2rem; color: var(--accent); margin-bottom: 10px; }
-        .product-card p { font-size: 0.9rem; color: #ddd; margin-bottom: 15px; }
-        .product-card .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; }
+        .product-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: var(--accent);
+            transform: translateY(0);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.15);
+        }
+        .product-card h4 { font-size: 1.3rem; color: var(--accent); margin-bottom: 10px; font-family: 'Cinzel', serif; }
+        .product-card p { font-size: 0.95rem; color: #ddd; margin-bottom: 15px; line-height: 1.6; }
+        .product-card .price { font-size: 1.8rem; font-weight: bold; margin-bottom: 15px; color: var(--accent); }
         .product-card a { width: 100%; justify-content: center; text-align: center; }
 
-        .loader { text-align: center; color: var(--accent); padding: 20px; display: none; }
-        .loader i { animation: spin 1s linear infinite; font-size: 2rem;}
+        .loader { text-align: center; color: var(--accent); padding: 40px 20px; display: none; }
+        .loader i { animation: spin 1s linear infinite; font-size: 2.5rem;}
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* =========================================
@@ -322,6 +355,8 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .services-grid, .contact-grid { grid-template-columns: 1fr; }
             .modal-content { padding: 20px; }
+            .modal-header-text h2 { font-size: 1.8rem; }
+            .products-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -361,9 +396,9 @@
             </div>
             <div class="bio-text">
                 <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">L'Esprit <span class="text-accent">Fondateur</span></h2>
-                <p>Je suis <b>Olivier Tshimbalanga</b>, développeur web passionné et entrepreneur basé à Kinshasa. Mon parcours a débuté avec une conviction forte : maîtriser la technologie est la clé pour dynamiser l'économie de la RDC et offrir de réelles opportunités aux créateurs.</p>
-                <p>Expert en développement (HTML, CSS, JavaScript) et en stratégies digitales, ma mission est de concevoir des outils innovants et de vous transmettre les compétences nécessaires pour bâtir une présence en ligne incontournable.</p>
-                <p>Avec KIYOJO ACADÉMIA, je mets mon expertise technique, ma créativité et mon exigence professionnelle à votre service. Ensemble, transformons vos ambitions en réussites numériques concrètes.</p>
+                <p>Nous sommes <b>Optisite Digital</b>, experts en développement web passionnés et entrepreneurs basés à Kinshasa. Notre parcours a débuté avec une conviction forte : maîtriser la technologie est[...]
+                <p>Experts en développement (HTML, CSS, JavaScript) et en stratégies digitales, notre mission est de concevoir des outils innovants et de vous transmettre les compétences nécessaires p[...]
+                <p>Avec KIYOJO ACADÉMIA, nous mettons notre expertise technique, notre créativité et notre exigence professionnelle à votre service. Ensemble, transformons vos ambitions en réussites numériq[...]
             </div>
         </div>
     </section>
@@ -436,7 +471,7 @@
             </div>
             <div class="glass-panel testimonial-card">
                 <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                <p>"Un accompagnement premium de A à Z. Olivier comprend les enjeux du digital et a su nous guider vers une stratégie de marketing ultra-rentable."</p>
+                <p>"Un accompagnement premium de A à Z. Optisite Digital comprend les enjeux du digital et a su nous guider vers une stratégie de marketing ultra-rentable."</p>
                 <div class="client-name">- Agence Lumina</div>
             </div>
         </div>
@@ -475,7 +510,7 @@
             <a href="#"><i class="fa-brands fa-linkedin"></i></a>
             <a href="#"><i class="fa-brands fa-facebook"></i></a>
         </div>
-        <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 Kiyojo Académia. Tous droits réservés. Conçu par Olivier Tshimbalanga.</p>
+        <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 Kiyojo Académia. Tous droits réservés. Conçu par Optisite Digital.</p>
     </footer>
 
     <!-- BOUTONS FLOTTANTS -->
@@ -509,19 +544,8 @@
     ========================================= -->
     <script>
         /* --- CONFIGURATION GOOGLE SHEETS --- */
-        // ⚠️ Remplace ces liens par les URL CSV de tes propres Google Sheets publiés sur le web.
-        const MARKETING_SHEET_URL = "URL_GOOGLE_SHEET_MARKETING"; 
-        const VIDEO_SHEET_URL = "URL_GOOGLE_SHEET_VIDEO";
-
-        // Exemple de données de fallback si les URL ne sont pas encore configurées
-        const fallbackMarketing = [
-            { Nom_Produit: "Formation Facebook Ads", Description: "Apprenez à lancer des campagnes rentables et cibler la bonne audience.", Prix: "29$", URL: "#" },
-            { Nom_Produit: "Pack SEO Premium", Description: "Outils et checklists pour positionner votre site en haut de Google.", Prix: "15$", URL: "#" }
-        ];
-        const fallbackVideo = [
-            { Titre_Service: "Montage TikTok Premium", Description: "Montage dynamique pour TikTok et Reels avec sous-titres animés.", Prix: "20$" },
-            { Titre_Service: "Formation Premiere Pro", Description: "Maîtrisez le logiciel phare de montage vidéo de A à Z.", Prix: "45$" }
-        ];
+        const MARKETING_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=0&single=true&output=csv";
+        const VIDEO_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=325166811&single=true&output=csv";
 
         /* --- MENU HAMBURGER & NAVBAR --- */
         const navbar = document.getElementById('navbar');
@@ -593,19 +617,40 @@
             productsGrid.innerHTML = '';
             loader.style.display = 'block';
 
+            // Réinitialise les animations
+            const headerText = document.querySelector('.modal-header-text');
+            headerText.style.animation = 'none';
+            headerText.offsetHeight; // Force le reflow
+            headerText.style.animation = 'fadeInDown 0.8s ease forwards';
+
+            const title = document.querySelector('#modal-title');
+            title.style.animation = 'none';
+            title.offsetHeight;
+            title.style.animation = 'slideInLeft 0.8s ease 0.2s forwards';
+
+            const desc = document.querySelector('#modal-desc');
+            desc.style.animation = 'none';
+            desc.offsetHeight;
+            desc.style.animation = 'slideInRight 0.8s ease 0.4s forwards';
+
             let sheetUrl = '';
 
             if (serviceType === 'marketing') {
                 modalTitle.innerHTML = 'Bienvenue dans le <span class="text-accent">Marketing Digital</span>';
-                modalDesc.innerText = "Vous souhaitez développer votre activité en ligne, attirer davantage de clients et augmenter vos revenus ? Découvrez notre sélection de ressources et produits dédiés au marketing digital.";
+                modalDesc.innerText = "Développez votre activité en ligne, attirez davantage de clients et augmentez vos revenus grâce à nos stratégies et ressources premium. Découvrez nos solutions complètes pour dominer votre marché digital.";
                 sheetUrl = MARKETING_SHEET_URL;
-                fetchData(sheetUrl, fallbackMarketing, 'marketing');
+                fetchData(sheetUrl, 'marketing');
             } else if (serviceType === 'video') {
                 modalTitle.innerHTML = 'Bienvenue dans l\'univers du <span class="text-accent">Montage Vidéo</span>';
-                modalDesc.innerText = "Découvrez des ressources, outils, formations et services destinés aux créateurs de contenu, monteurs vidéo et entrepreneurs souhaitant améliorer leur présence visuelle.";
+                modalDesc.innerText = "Créez du contenu cinématographique professionnel, maîtrisez les meilleurs outils de montage et boostez votre présence sur les réseaux sociaux. Découvrez nos formations et services spécialisés pour créateurs de contenu.";
                 sheetUrl = VIDEO_SHEET_URL;
-                fetchData(sheetUrl, fallbackVideo, 'video');
+                fetchData(sheetUrl, 'video');
             }
+
+            // Scroll fluide vers la modale
+            setTimeout(() => {
+                modal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
         }
 
         function closeModal() {
@@ -619,13 +664,7 @@
         });
 
         // Fonction pour récupérer les données CSV
-        function fetchData(url, fallback, type) {
-            // Si l'URL n'est pas configurée, on utilise les fausses données pour la démo
-            if (url.includes('URL_GOOGLE_SHEET')) {
-                setTimeout(() => { renderProducts(fallback, type); }, 800); // Simulation délai réseau
-                return;
-            }
-
+        function fetchData(url, type) {
             Papa.parse(url, {
                 download: true,
                 header: true,
@@ -633,8 +672,8 @@
                     renderProducts(results.data, type);
                 },
                 error: function() {
-                    productsGrid.innerHTML = '<p style="color:red; text-align:center;">Erreur de connexion à la base de données.</p>';
                     loader.style.display = 'none';
+                    productsGrid.innerHTML = '<p style="color:var(--accent); text-align:center; grid-column: 1/-1;">Impossible de charger les données. Veuillez réessayer.</p>';
                 }
             });
         }
@@ -645,32 +684,34 @@
             productsGrid.innerHTML = '';
 
             if(data.length === 0) {
-                productsGrid.innerHTML = '<p>Aucun produit disponible pour le moment.</p>';
+                productsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Aucun produit disponible pour le moment.</p>';
                 return;
             }
 
-            data.forEach(item => {
+            data.forEach((item, index) => {
                 // Ignore les lignes vides du CSV
-                if (!item.Nom_Produit && !item.Titre_Service) return; 
+                if (!item.Nom_Produit && !item.Titre_Service) return;
 
                 const nom = type === 'marketing' ? item.Nom_Produit : (item.Titre_Service || item.Nom_Produit);
                 const desc = item.Description || 'Description non disponible.';
                 const prix = item.Prix || '-';
                 const urlAchat = item.URL || item.Lien || '#';
 
-                const cardHtml = `
-                    <div class="product-card">
-                        <div>
-                            <h4>${nom}</h4>
-                            <p>${desc}</p>
+                if (nom) {
+                    const cardHtml = `
+                        <div class="product-card" style="animation-delay: ${index * 0.1}s;">
+                            <div>
+                                <h4>${nom}</h4>
+                                <p>${desc}</p>
+                            </div>
+                            <div>
+                                <div class="price">${prix}</div>
+                                <a href="${urlAchat}" class="btn btn-outline" target="_blank" style="padding: 10px; font-size: 0.9rem;">Accéder <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
                         </div>
-                        <div>
-                            <div class="price text-accent">${prix}</div>
-                            <a href="${urlAchat}" class="btn btn-outline" target="_blank" style="padding: 8px;">Accéder <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        </div>
-                    </div>
-                `;
-                productsGrid.innerHTML += cardHtml;
+                    `;
+                    productsGrid.innerHTML += cardHtml;
+                }
             });
         }
     </script>
