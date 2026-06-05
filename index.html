@@ -1,515 +1,725 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIYOJO ACADÉMIA | Agence Digitale & Création de Contenu</title>
+    <title>KIYOJO ACADÉMIA | Transforme ton avenir digital</title>
+    <meta name="description" content="Marketing digital & montage vidéo premium par Jonathan Kiyojo.">
     
-    <!-- PapaParse pour lire Google Sheets -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <!-- FontAwesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb', // Bleu électrique
+                        dark: '#0f172a', // Noir / Bleu nuit profond
+                        light: '#ffffff', // Blanc
+                        surface: '#f8fafc' // Gris très clair pour les fonds
+                    },
+                    fontFamily: {
+                        heading: ['Poppins', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        /* ================= VARIABLES & RESET ================= */
-        :root {
-            --primary: #6366f1; /* Indigo premium */
-            --primary-hover: #4f46e5;
-            --secondary: #25d366; /* WhatsApp Green */
-            --bg-dark: #0f172a;
-            --bg-card: rgba(30, 41, 59, 0.7);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #fbbf24; /* Or pour les étoiles */
-            --nav-bg: rgba(15, 23, 42, 0.9);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
-        html { scroll-behavior: smooth; }
-
-        /* Effets Premium de base */
-        .glass {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-        }
-
-        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        /* ================= TOP NAVIGATION ================= */
-        nav {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-            background: var(--nav-bg); backdrop-filter: blur(10px);
-            padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .nav-logo h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: white; letter-spacing: 1px; }
-        .nav-logo span { color: var(--primary); }
-        .nav-desc { color: var(--text-muted); font-size: 0.9rem; font-weight: 300; display: none; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
         
-        @media (min-width: 768px) {
-            .nav-desc { display: block; }
-        }
-
-        /* ================= HERO & FOUNDER SECTION ================= */
-        .hero {
-            padding: 8rem 2rem 4rem; /* Espace pour la nav fixe */
-            text-align: center; max-width: 900px; margin: 0 auto;
-            position: relative;
-        }
-        .hero::before {
-            content: ''; position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
-            width: 60vw; height: 60vw; max-width: 600px; max-height: 600px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            z-index: -1; border-radius: 50%;
-        }
-        .hero-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.2; margin-bottom: 1.5rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; color: transparent; }
-        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem; }
-
-        .founder-box {
-            display: flex; align-items: center; gap: 3rem; text-align: left;
-            padding: 3rem; margin-top: 2rem;
-        }
-        .founder-img-wrapper { flex-shrink: 0; position: relative; }
-        .founder-img {
-            width: 250px; height: 250px; object-fit: cover; border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 2px solid rgba(99, 102, 241, 0.3);
-        }
-        .founder-text h2 { color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem; }
-        .founder-text h3 { font-size: 1.2rem; margin-bottom: 1.5rem; color: white; font-weight: 400; }
-        .founder-text p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; }
-
-        @media (max-width: 768px) {
-            .founder-box { flex-direction: column; text-align: center; padding: 2rem 1rem; }
-            .hero-title { font-size: 2.5rem; }
-        }
-
-        /* ================= STATISTIQUES ================= */
-        .stats-section { padding: 4rem 2rem; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .stats-grid { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; text-align: center; }
-        .stat-item h3 { font-size: 3.5rem; color: var(--primary); font-family: 'Playfair Display', serif; }
-        .stat-item p { color: var(--text-muted); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* ================= AVIS CLIENTS ================= */
-        .testimonials { padding: 5rem 0; overflow: hidden; }
-        .section-header { text-align: center; margin-bottom: 3rem; padding: 0 1rem; }
-        .section-header h2 { font-size: 2.5rem; font-family: 'Playfair Display', serif; margin-bottom: 1rem; }
+        /* Animations de base */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
         
-        .marquee-wrapper { display: flex; width: max-content; animation: scroll 35s linear infinite; }
-        .marquee-wrapper:hover { animation-play-state: paused; }
-        .review-card {
-            width: 350px; margin: 0 1rem; padding: 2rem; flex-shrink: 0;
-            display: flex; flex-direction: column; gap: 1rem;
+        /* Loader de démarrage */
+        #page-loader {
+            position: fixed; inset: 0; background: #0f172a; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
         }
-        .stars { color: var(--accent); font-size: 1.2rem; }
-        .review-text { font-style: italic; color: var(--text-muted); }
-        .review-author { font-weight: 600; color: white; }
+        .loader-logo { font-size: 3rem; color: white; font-family: 'Poppins', sans-serif; font-weight: 700; letter-spacing: 2px; }
+        .loader-dot { color: #2563eb; animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* ================= PORTAILS DE SERVICES (ACCUEIL) ================= */
-        .portals-section { padding: 5rem 2rem; max-width: 1000px; margin: 0 auto; text-align: center; }
-        .portals-grid { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 3rem; }
-        .portal-card {
-            flex: 1; min-width: 300px; padding: 3rem 2rem; cursor: pointer;
-            transition: all 0.4s ease; text-align: center; group;
+        /* Effets Premium */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .portal-card i { font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; transition: transform 0.4s; }
-        .portal-card h3 { font-size: 1.8rem; margin-bottom: 1rem; }
-        .portal-card p { color: var(--text-muted); margin-bottom: 2rem; }
-        .portal-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2); }
-        .portal-card:hover i { transform: scale(1.1); }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); }
         
-        .btn-enter {
-            display: inline-block; padding: 0.8rem 2rem; background: var(--primary); color: white;
-            border-radius: 30px; font-weight: 600; border: none; cursor: pointer;
-            transition: background 0.3s;
+        /* Modal pour les services */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px);
+            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; padding: 1rem;
         }
-        .portal-card:hover .btn-enter { background: var(--primary-hover); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: white; width: 100%; max-width: 1000px; max-height: 90vh; overflow-y: auto;
+            border-radius: 1rem; transform: scale(0.95); transition: all 0.3s ease;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
 
-        /* ================= GESTION DES VUES (SPA) ================= */
-        .view-section { display: block; opacity: 1; transition: opacity 0.4s ease; }
-        .view-hidden { display: none !important; opacity: 0; }
+        /* Slider Témoignages */
+        .slider-container { overflow: hidden; position: relative; width: 100%; }
+        .slider-track { display: flex; transition: transform 0.5s ease-in-out; }
+        .slide { min-width: 100%; padding: 1rem; }
 
-        /* ================= VUE INTERNE : SERVICES / PRODUITS ================= */
-        .inner-view { padding: 8rem 2rem 4rem; max-width: 1200px; margin: 0 auto; min-height: 100vh; }
-        .view-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
-        
-        .btn-back {
-            background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2);
-            padding: 0.6rem 1.5rem; border-radius: 30px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
-            transition: 0.3s; font-size: 1rem;
-        }
-        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: white; }
-        
-        .view-title { font-size: 2.5rem; font-family: 'Playfair Display', serif; color: var(--primary); }
-
-        .loader-container { text-align: center; padding: 5rem 0; color: var(--text-muted); font-size: 1.2rem; }
-        .loader-container i { color: var(--primary); margin-bottom: 1rem; }
-
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-        
-        .item-card {
-            padding: 2.5rem; display: flex; flex-direction: column; position: relative;
-            transition: transform 0.4s ease, border-color 0.4s ease;
-        }
-        .item-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.3); }
-        .item-card h3 { font-size: 1.6rem; margin-bottom: 1rem; color: white; }
-        .item-card .price { font-size: 2rem; font-weight: 800; color: var(--accent); margin-bottom: 1rem; }
-        .item-card p { color: var(--text-muted); margin-bottom: 2.5rem; flex-grow: 1; font-size: 1.05rem; }
-        
-        .btn-action-primary {
-            display: block; width: 100%; text-align: center; padding: 1rem;
-            border-radius: 12px; text-decoration: none; font-weight: bold; transition: 0.3s;
-            background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(99,102,241,0.3);
-        }
-        .btn-action-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        
-        .btn-action-wa {
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;
-            padding: 1rem; border-radius: 12px; text-decoration: none; font-weight: bold; transition: 0.3s;
-            background: var(--secondary); color: white; box-shadow: 0 4px 15px rgba(37,211,102,0.3);
-        }
-        .btn-action-wa:hover { background: #1ebd5c; transform: translateY(-2px); }
-
-        /* ================= ABOUT / FOOTER ================= */
-        .footer-section { padding: 4rem 2rem; background: rgba(0,0,0,0.5); text-align: center; }
-        .contact-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
-        .contact-links a { color: var(--text-muted); text-decoration: none; font-size: 1.2rem; transition: color 0.3s; display: flex; align-items: center; gap: 0.5rem; }
-        .contact-links a:hover { color: white; }
-        .contact-links i { color: var(--primary); }
-
-        .floating-wa {
-            position: fixed; bottom: 30px; right: 30px; background: var(--secondary); color: white;
-            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2.2rem; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4);
-            text-decoration: none; z-index: 1000; animation: pulse-wa 2s infinite;
-        }
-        @keyframes pulse-wa {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-        
-        @keyframes fadeUpAnim {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* FAQ Accordéon */
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .faq-item.active .faq-answer { max-height: 500px; }
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
     </style>
 </head>
-<body>
+<body class="bg-surface text-dark antialiased">
 
-    <!-- BARRE DE NAVIGATION FIXE -->
-    <nav>
-        <div class="nav-logo">
-            <h1>KIYOJO<span>.</span></h1>
+    <div id="page-loader">
+        <div class="loader-logo">KIYOJO<span class="loader-dot">.</span></div>
+        <div class="mt-4 w-48 h-1 bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-0 transition-all duration-1000 ease-out" id="loader-bar"></div>
         </div>
-        <div class="nav-desc">
-            Agence Digitale & Stratégies de Conversion
+    </div>
+
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-heading font-bold tracking-wide">KIYOJO<span class="text-primary">.</span></a>
+            
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-600">
+                <a href="#about" class="hover:text-primary transition track-click" data-label="Nav: Qui sommes-nous">Qui sommes-nous</a>
+                <a href="#why-us" class="hover:text-primary transition track-click" data-label="Nav: Pourquoi nous">Pourquoi nous</a>
+                <a href="#services" class="hover:text-primary transition track-click" data-label="Nav: Services">Services</a>
+                <a href="#faq" class="hover:text-primary transition track-click" data-label="Nav: FAQ">FAQ</a>
+                <a href="#contact" class="bg-dark text-white px-5 py-2.5 rounded-lg hover:bg-primary transition track-click" data-label="Nav: Contact CTA">Contactez-nous</a>
+            </div>
+
+            <!-- Bouton Mobile -->
+            <button class="md:hidden text-2xl text-dark" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Menu Mobile Overlay -->
+        <div id="mobile-menu" class="hidden bg-white border-t border-gray-100 p-6 flex-col gap-4 text-center absolute w-full shadow-xl">
+            <a href="#about" class="block font-medium py-2">Qui sommes-nous</a>
+            <a href="#services" class="block font-medium py-2">Services</a>
+            <a href="#faq" class="block font-medium py-2">FAQ</a>
+            <a href="#contact" class="block bg-primary text-white py-3 rounded-lg font-medium mt-2">Contactez-nous</a>
         </div>
     </nav>
 
-    <!-- ==================== VUE PRINCIPALE (ACCUEIL) ==================== -->
-    <main id="view-home" class="view-section">
+    <section id="hero" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden flex items-center min-h-[90vh]">
+        <!-- Background Elements -->
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-surface via-white to-blue-50 -z-10"></div>
+        <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10"></div>
         
-        <section class="hero fade-in">
-            <h1 class="hero-title">Transformez votre audience en clients fidèles.</h1>
-            <p class="hero-subtitle">Nous combinons l'ingénierie du marketing digital et la puissance créative du montage vidéo pour scaler votre business de manière prédictible.</p>
-            
-            <div class="founder-box glass fade-in">
-                <div class="founder-img-wrapper">
-                    <img src="image.jpg" alt="Jonathan Kiyojo" class="founder-img" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=600'">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="text-left">
+                <div class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-semibold text-sm mb-6 reveal">
+                    🚀 Marketing Digital & Montage Vidéo Premium
                 </div>
-                <div class="founder-text">
-                    <h2>Bienvenue !</h2>
-                    <h3>Je suis <strong>Jonathan Kiyojo</strong>, CEO de KIYOJO ACADÉMIA</h3>
-                    <p>De mon vrai nom Kibwanga Yoan Jonathan, web-entrepreneur et comptable de formation, j'ai embrassé le monde du digital en décembre 2024.<br><br> Créateur de contenu dans les domaines du business, du développement personnel et de la comptabilité, j'ai fondé cette agence avec un objectif clair : créer des stratégies marketing percutantes et des vidéos au format court (Reels, TikTok, Shorts) qui captent l'attention et génèrent des résultats tangibles.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- STATISTIQUES -->
-        <section class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-item fade-in">
-                    <h3 class="counter" data-target="156">0</h3>
-                    <p>Projets Réalisés</p>
-                </div>
-                <div class="stat-item fade-in">
-                    <h3 class="counter" data-target="156">0</h3>
-                    <p>Clients Satisfaits</p>
-                </div>
-                <div class="stat-item fade-in">
-                    <h3 class="counter-float" data-target="99.9">0</h3>
-                    <p>Fiabilité (%)</p>
+                <h1 class="text-5xl lg:text-7xl font-heading font-bold leading-tight mb-6 reveal delay-100">
+                    KIYOJO <br><span class="text-primary">ACADÉMIA</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg reveal delay-200">
+                    Transforme ton avenir digital avec KIYOJO ACADÉMIA. Des stratégies prouvées pour scaler votre business.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 reveal delay-200">
+                    <a href="#services" class="bg-primary text-white text-center px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg shadow-primary/30 track-click" data-label="Hero: Découvrir nos services">
+                        Découvrir nos services
+                    </a>
+                    <a href="#contact" class="bg-dark text-white text-center px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 transition shadow-lg track-click" data-label="Hero: Commencer maintenant">
+                        Commencer maintenant
+                    </a>
                 </div>
             </div>
-        </section>
-
-        <!-- AVIS CLIENTS -->
-        <section class="testimonials fade-in">
-            <div class="section-header">
-                <h2>Ce qu'ils disent de nous</h2>
-                <p style="color: var(--text-muted);">La satisfaction de nos clients est notre meilleure publicité.</p>
-            </div>
-            <div class="marquee-wrapper" id="marquee-content">
-                <!-- Doublé en JS pour l'effet infini -->
-                <div class="review-card glass">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Une stratégie marketing redoutable ! Mon chiffre d'affaires a décollé depuis que je travaille avec Kiyojo."</p>
-                    <span class="review-author">— Sarah M., Entrepreneuse</span>
+            <div class="relative hidden lg:block reveal delay-200">
+                <div class="w-full h-[500px] bg-gradient-to-tr from-dark to-primary rounded-3xl overflow-hidden shadow-2xl relative">
+                    <!-- Placeholder premium remplaçant une image -->
+                    <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                    <div class="absolute inset-0 flex items-center justify-center text-white text-opacity-50 text-9xl">
+                        <i class="fas fa-rocket"></i>
+                    </div>
                 </div>
-                <div class="review-card glass">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Leurs montages pour mes Reels et TikToks ont rendu mon contenu viral. Service au top, rapide et pro."</p>
-                    <span class="review-author">— Marc D., Créateur de contenu</span>
-                </div>
-                <div class="review-card glass">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Jonathan a une vision business claire. Les résultats sont là, je recommande à 100%."</p>
-                    <span class="review-author">— Elise T., Consultante</span>
-                </div>
-                <div class="review-card glass">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Agence très réactive. Le suivi est parfait, on sent vraiment qu'on est accompagné par un expert."</p>
-                    <span class="review-author">— Paul K., E-commerçant</span>
-                </div>
-                <div class="review-card glass">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Enfin une agence qui comprend les codes des formats courts. Un ROI impressionnant."</p>
-                    <span class="review-author">— Aminata B., CEO</span>
+                <!-- Badge flottant -->
+                <div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-2xl flex items-center gap-4">
+                    <div class="bg-green-100 text-green-600 w-12 h-12 rounded-full flex items-center justify-center text-xl">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Croissance</p>
+                        <p class="font-bold font-heading text-xl">+300%</p>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <!-- PORTAILS DE SERVICES -->
-        <section class="portals-section fade-in">
-            <h2 style="font-size: 2.5rem; font-family: 'Playfair Display', serif;">Nos Solutions</h2>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Sélectionnez votre domaine pour découvrir nos offres.</p>
-            
-            <div class="portals-grid">
-                <!-- Clique -> Ouvre la vue Marketing -->
-                <div class="portal-card glass" onclick="openView('marketing')">
-                    <i class="fas fa-bullseye"></i>
-                    <h3>Marketing Digital</h3>
-                    <p>Produits, formations et stratégies pour optimiser vos conversions.</p>
-                    <button class="btn-enter">Accéder à la boutique</button>
-                </div>
-                
-                <!-- Clique -> Ouvre la vue Montage -->
-                <div class="portal-card glass" onclick="openView('video')">
-                    <i class="fas fa-film"></i>
-                    <h3>Montage Vidéo</h3>
-                    <p>Création de vidéos courtes virales pour TikTok, Reels et Shorts.</p>
-                    <button class="btn-enter">Voir nos services</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER & CONTACT -->
-        <footer class="footer-section">
-            <h2 style="margin-bottom: 2rem; font-family: 'Playfair Display', serif;">Contactez-nous</h2>
-            <div class="contact-links">
-                <a href="mailto:joe489581@gmail.com"><i class="fas fa-envelope"></i> joe489581@gmail.com</a>
-                <a href="tel:+243827445800"><i class="fas fa-phone-alt"></i> +243 827 445 800</a>
-                <a href="https://wa.me/243827445800" target="_blank" style="color: var(--secondary);"><i class="fab fa-whatsapp"></i> Discuter sur WhatsApp</a>
-            </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 KIYOJO ACADÉMIA. Tous droits réservés.</p>
-        </footer>
-    </main>
-
-    <!-- ==================== VUE INTERNE (PRODUITS / SERVICES) ==================== -->
-    <main id="view-items" class="view-section view-hidden">
-        <div class="inner-view">
-            <div class="view-header">
-                <button class="btn-back" onclick="goHome()">
-                    <i class="fas fa-arrow-left"></i> Retour à l'accueil
-                </button>
-                <h2 id="view-title" class="view-title">Titre dynamique</h2>
-            </div>
-
-            <!-- Loader avec texte dynamique -->
-            <div id="loader-container" class="loader-container">
-                <i class="fas fa-circle-notch fa-spin fa-3x"></i>
-                <p id="loader-text">Chargement...</p>
-            </div>
-
-            <!-- Grille où les données seront injectées -->
-            <div id="data-container" class="items-grid"></div>
         </div>
-    </main>
+    </section>
 
-    <!-- BOUTON WHATSAPP GLOBAL FLOTTANT -->
-    <a href="https://wa.me/243827445800?text=Bonjour%20Jonathan,%20je%20suis%20sur%20le%20site%20KIYOJO%20ACADÉMIA%20et%20j'aimerais%20des%20informations." class="floating-wa" target="_blank" aria-label="Contact WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <section id="about" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="relative reveal">
+                    <img src="https://placehold.co/600x700/0f172a/ffffff?text=Jonathan+Kiyojo" alt="Jonathan Kiyojo" class="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5]">
+                    <div class="absolute top-6 right-6 bg-primary text-white p-4 rounded-xl shadow-lg text-center">
+                        <i class="fas fa-award text-3xl mb-2"></i>
+                        <p class="font-bold text-sm">CEO & Fondateur</p>
+                    </div>
+                </div>
+                <div class="reveal delay-100">
+                    <h2 class="text-4xl font-heading font-bold mb-6">L'expertise derrière <span class="text-primary">l'excellence.</span></h2>
+                    <div class="w-20 h-1 bg-primary mb-8"></div>
+                    <p class="text-lg text-gray-600 leading-relaxed mb-6 text-justify">
+                        Je suis <strong class="text-dark">Jonathan Kiyojo</strong>, CEO de KIYOJO ACADÉMIA, de mon vrai nom Kibwanga Yoan Jonathan. Web-entrepreneur et comptable de formation, j’ai embrassé le monde du digital en décembre 2024.
+                    </p>
+                    <p class="text-lg text-gray-600 leading-relaxed mb-8 text-justify">
+                        Créateur de contenu dans les domaines du business, du développement personnel et de la comptabilité, je suis également le fondateur d’une agence de montage vidéo spécialisée dans les formats courts.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-primary text-xl"><i class="fas fa-briefcase"></i></div>
+                            <span class="font-semibold font-heading">Web-entrepreneur</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-primary text-xl"><i class="fas fa-video"></i></div>
+                            <span class="font-semibold font-heading">Expert Vidéo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- LOGIQUE JAVASCRIPT -->
-    <script>
-        /* --- 1. GESTION DU CARROUSEL --- */
-        const marquee = document.getElementById('marquee-content');
-        if(marquee) marquee.innerHTML += marquee.innerHTML; 
-
-        /* --- 2. GESTION DES VUES (SPA Logic) --- */
-        const viewHome = document.getElementById('view-home');
-        const viewItems = document.getElementById('view-items');
-        const viewTitle = document.getElementById('view-title');
-        const loaderText = document.getElementById('loader-text');
-        const dataContainer = document.getElementById('data-container');
-        const loaderContainer = document.getElementById('loader-container');
-
-        // URLs Google Sheets
-        const urls = {
-            marketing: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=0&single=true&output=csv",
-            video: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=325166811&single=true&output=csv"
-        };
-        const phone = "243827445800";
-
-        function openView(type) {
-            // Cacher l'accueil, montrer la vue interne
-            viewHome.classList.add('view-hidden');
-            viewItems.classList.remove('view-hidden');
-            window.scrollTo(0, 0); // Remonter en haut
+    <section id="why-us" class="py-24 bg-surface relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">Pourquoi nous choisir ?</h2>
+                <p class="text-gray-600 text-lg">Une méthodologie axée sur les résultats et la croissance de votre entreprise.</p>
+            </div>
             
-            // Vider les anciennes données et afficher le loader
-            dataContainer.innerHTML = "";
-            loaderContainer.style.display = "block";
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Carte 1 -->
+                <div class="glass-card p-8 rounded-2xl reveal">
+                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold font-heading mb-3">Expertise digitale réelle</h3>
+                    <p class="text-gray-600">Des stratégies éprouvées sur le terrain, adaptées aux algorithmes actuels.</p>
+                </div>
+                <!-- Carte 2 -->
+                <div class="glass-card p-8 rounded-2xl reveal delay-100">
+                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold font-heading mb-3">Expérience entrepreneuriale</h3>
+                    <p class="text-gray-600">Une vision business et comptable pour assurer la rentabilité de vos actions.</p>
+                </div>
+                <!-- Carte 3 -->
+                <div class="glass-card p-8 rounded-2xl reveal delay-200">
+                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold font-heading mb-3">Services professionnels</h3>
+                    <p class="text-gray-600">Des livrables de haute qualité, respectant les standards premium.</p>
+                </div>
+                <!-- Carte 4 -->
+                <div class="glass-card p-8 rounded-2xl reveal">
+                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold font-heading mb-3">Résultats orientés business</h3>
+                    <p class="text-gray-600">Chaque action est mesurée par son impact sur votre chiffre d'affaires.</p>
+                </div>
+                <!-- Carte 5 -->
+                <div class="glass-card p-8 rounded-2xl reveal delay-100 md:col-span-2 lg:col-span-1 lg:col-start-2">
+                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold font-heading mb-3">Accompagnement sérieux</h3>
+                    <p class="text-gray-600">Un suivi personnalisé et une réactivité à toute épreuve pour vos projets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            // Personnalisation du texte selon le type
-            if (type === 'marketing') {
-                viewTitle.innerText = "Produits & Formations";
-                loaderText.innerText = "Chargement des produits digitaux en cours...";
-            } else {
-                viewTitle.innerText = "Services de Montage";
-                loaderText.innerText = "Chargement des services vidéos en cours...";
+    <section id="services" class="py-24 bg-dark text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">Nos Pôles d'Excellence</h2>
+                <p class="text-gray-400 text-lg">Sélectionnez le domaine dans lequel vous souhaitez exploser vos résultats.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-10">
+                <!-- Marketing Digital Block -->
+                <div class="bg-white/5 border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition duration-300 reveal group">
+                    <i class="fas fa-bullseye text-5xl text-primary mb-6 group-hover:scale-110 transition"></i>
+                    <h3 class="text-3xl font-heading font-bold mb-4">Marketing Digital</h3>
+                    <p class="text-gray-400 mb-8 leading-relaxed">Produits digitaux, tunnels de vente, et stratégies d'acquisition conçues pour transformer vos prospects en clients fidèles.</p>
+                    <button onclick="openServices('marketing')" class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-blue-600 transition flex items-center justify-center gap-3 track-click" data-label="Bouton: Accéder Marketing">
+                        Accéder au marketing digital <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Montage Vidéo Block -->
+                <div class="bg-white/5 border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition duration-300 reveal delay-100 group">
+                    <i class="fas fa-film text-5xl text-primary mb-6 group-hover:scale-110 transition"></i>
+                    <h3 class="text-3xl font-heading font-bold mb-4">Montage Vidéo</h3>
+                    <p class="text-gray-400 mb-8 leading-relaxed">Formats courts viraux (TikTok, Reels, Shorts) montés dynamiquement pour capter l'attention et maximiser la rétention.</p>
+                    <button onclick="openServices('video')" class="w-full bg-white text-dark py-4 rounded-xl font-bold hover:bg-gray-200 transition flex items-center justify-center gap-3 track-click" data-label="Bouton: Accéder Vidéo">
+                        Accéder au montage vidéo <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">Ils nous font confiance</h2>
+                <div class="flex justify-center gap-1 text-yellow-400 text-2xl">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="slider-container max-w-4xl mx-auto reveal">
+                <div class="slider-track" id="testimonial-track">
+                    <!-- Avis 1 -->
+                    <div class="slide">
+                        <div class="text-center px-4 md:px-12">
+                            <p class="text-xl md:text-2xl text-gray-700 italic font-heading mb-8">"L'expertise de Jonathan a littéralement doublé mon taux de conversion. Les stratégies marketing mises en place sont redoutables et d'une précision chirurgicale."</p>
+                            <h4 class="font-bold text-dark text-lg">Marc D.</h4>
+                            <p class="text-gray-500">Entrepreneur E-commerce</p>
+                        </div>
+                    </div>
+                    <!-- Avis 2 -->
+                    <div class="slide">
+                        <div class="text-center px-4 md:px-12">
+                            <p class="text-xl md:text-2xl text-gray-700 italic font-heading mb-8">"Le service de montage vidéo est incroyable. Mes Reels font maintenant des milliers de vues grâce au dynamisme et aux sous-titres parfaitement intégrés. Je recommande à 100%."</p>
+                            <h4 class="font-bold text-dark text-lg">Sophie L.</h4>
+                            <p class="text-gray-500">Créatrice de Contenu</p>
+                        </div>
+                    </div>
+                    <!-- Avis 3 -->
+                    <div class="slide">
+                        <div class="text-center px-4 md:px-12">
+                            <p class="text-xl md:text-2xl text-gray-700 italic font-heading mb-8">"Un accompagnement sérieux et professionnel. KIYOJO ACADÉMIA comprend vraiment les enjeux business. Mon chiffre d'affaires a décollé en 2 mois."</p>
+                            <h4 class="font-bold text-dark text-lg">Thomas B.</h4>
+                            <p class="text-gray-500">Coach Sportif</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Contrôles -->
+                <div class="flex justify-center gap-4 mt-8">
+                    <button onclick="moveSlider(-1)" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition"><i class="fas fa-chevron-left"></i></button>
+                    <button onclick="moveSlider(1)" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-24 bg-surface">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">Questions Fréquentes</h2>
+                <p class="text-gray-600">Tout ce que vous devez savoir avant de passer à l'action.</p>
+            </div>
+
+            <div class="space-y-4 reveal delay-100">
+                <!-- Q1 -->
+                <div class="glass-card rounded-xl faq-item">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
+                        Comment fonctionne KIYOJO ACADÉMIA ?
+                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-0 text-gray-600">
+                        <div class="pb-5">Nous analysons votre besoin, établissons une stratégie sur-mesure (que ce soit en marketing digital ou en montage vidéo), et nous implémentons les solutions pour générer des résultats tangibles pour votre business.</div>
+                    </div>
+                </div>
+                <!-- Q2 -->
+                <div class="glass-card rounded-xl faq-item">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
+                        Comment acheter un service ?
+                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-0 text-gray-600">
+                        <div class="pb-5">Rendez-vous dans la section "Services" ci-dessus, choisissez la catégorie, et cliquez sur "Voir le produit" ou contactez-nous directement via WhatsApp pour un devis personnalisé.</div>
+                    </div>
+                </div>
+                <!-- Q3 -->
+                <div class="glass-card rounded-xl faq-item">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
+                        Est-ce fiable ?
+                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-0 text-gray-600">
+                        <div class="pb-5">Absolument. Jonathan Kiyojo met en jeu sa réputation et son expertise d'entrepreneur et comptable. Nos témoignages clients et nos résultats transparents parlent d'eux-mêmes.</div>
+                    </div>
+                </div>
+                <!-- Q4 -->
+                <div class="glass-card rounded-xl faq-item">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
+                        Combien de temps pour les résultats ?
+                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 pb-0 text-gray-600">
+                        <div class="pb-5">Pour le montage vidéo, l'impact sur l'engagement est immédiat dès la publication. Pour les stratégies marketing, les premiers résultats de conversion sont généralement observables sous 2 à 4 semaines.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-primary text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 reveal">
+            <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">Prêt à dominer votre marché ?</h2>
+            <p class="text-xl text-blue-100 mb-10 leading-relaxed">
+                Ne laissez pas vos concurrents prendre l'avance. Contactez-nous dès aujourd'hui pour transformer votre présence digitale en une véritable machine à cash.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="https://wa.me/1234567890" target="_blank" class="bg-green-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-green-400 transition flex items-center justify-center gap-3 shadow-lg track-click" data-label="CTA: WhatsApp">
+                    <i class="fab fa-whatsapp text-2xl"></i> WhatsApp Direct
+                </a>
+                <a href="#services" class="bg-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition flex items-center justify-center gap-3 shadow-lg track-click" data-label="CTA: Acheter maintenant">
+                    <i class="fas fa-shopping-cart"></i> Acheter maintenant
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+            <div>
+                <a href="#" class="text-2xl font-heading font-bold text-white tracking-wide mb-4 inline-block">KIYOJO<span class="text-primary">.</span></a>
+                <p class="text-sm mt-4">Transformez votre vision en systèmes marketing rentables. Expert en montage vidéo court format.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Liens rapides</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#about" class="hover:text-white transition">Qui sommes-nous</a></li>
+                    <li><a href="#services" class="hover:text-white transition">Services</a></li>
+                    <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
+                    <li><a href="#" class="hover:text-white transition">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Suivez-nous</h4>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition track-click" data-label="Social: Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition track-click" data-label="Social: LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition track-click" data-label="Social: YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-12 text-sm text-gray-600" id="copyright-trigger">
+            &copy; 2026 KIYOJO ACADÉMIA. Tous droits réservés.
+        </div>
+    </footer>
+
+    <div id="data-modal" class="modal-overlay">
+        <div class="modal-content relative flex flex-col h-full md:h-auto max-h-[90vh]">
+            <!-- Header Modal -->
+            <div class="sticky top-0 bg-white p-6 border-b border-gray-100 flex justify-between items-center z-10 rounded-t-xl">
+                <div>
+                    <h2 id="modal-title" class="text-2xl font-heading font-bold text-dark">Chargement...</h2>
+                    <p class="text-gray-500 text-sm mt-1">Sélectionnez l'offre qui vous correspond.</p>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-red-100 hover:text-red-500 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Loader interne -->
+            <div id="modal-loader" class="p-20 text-center text-primary">
+                <i class="fas fa-circle-notch fa-spin text-5xl"></i>
+                <p class="mt-4 font-medium">Récupération des données en temps réel...</p>
+            </div>
+
+            <!-- Conteneur de données -->
+            <div id="modal-data-container" class="p-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6 hidden overflow-y-auto">
+                <!-- Rempli par JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-dashboard" class="fixed inset-0 bg-dark z-[9999] hidden overflow-y-auto text-white p-6">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex justify-between items-center mb-10 pb-6 border-b border-gray-800">
+                <h2 class="text-3xl font-heading font-bold"><i class="fas fa-lock text-primary mr-3"></i>Admin Center</h2>
+                <button onclick="closeAdmin()" class="bg-red-500/20 text-red-400 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition">Fermer</button>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6 mb-10">
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <p class="text-gray-400 text-sm mb-2">Visiteurs Totaux</p>
+                    <p class="text-4xl font-bold text-white" id="stat-views">0</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <p class="text-gray-400 text-sm mb-2">Clics sur CTA</p>
+                    <p class="text-4xl font-bold text-primary" id="stat-clicks">0</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <p class="text-gray-400 text-sm mb-2">Produits Vus</p>
+                    <p class="text-4xl font-bold text-green-400" id="stat-products">0</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <p class="text-gray-400 text-sm mb-2">Taux d'Interaction</p>
+                    <p class="text-4xl font-bold text-yellow-400" id="stat-rate">0%</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-xl">
+                <h3 class="text-xl font-bold mb-6 border-b border-gray-700 pb-4">Journal d'Activité Récent (Local)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-400">
+                        <thead class="text-xs text-gray-500 uppercase bg-gray-900">
+                            <tr><th class="px-4 py-3">Date/Heure</th><th class="px-4 py-3">Action</th><th class="px-4 py-3">Détail</th></tr>
+                        </thead>
+                        <tbody id="admin-log-table">
+                            <!-- Rempli par JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const URL_CSV_MARKETING = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=0&single=true&output=csv";
+        const URL_CSV_VIDEO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=325166811&single=true&output=csv";
+
+        // --- TRACKING ENGINE ---
+        const Tracker = {
+            data: JSON.parse(localStorage.getItem('kiyojo_stats')) || { views: 0, clicks: 0, products_viewed: 0, logs: [] },
+            
+            init() {
+                // Incrémenter les vues une fois par session
+                if(!sessionStorage.getItem('visited')) {
+                    this.data.views++;
+                    sessionStorage.setItem('visited', 'true');
+                    this.logAction('Visite', 'Nouvelle page vue');
+                }
+                
+                // Attacher événements de clic
+                document.querySelectorAll('.track-click').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                        this.data.clicks++;
+                        this.logAction('Clic CTA', el.getAttribute('data-label') || 'Bouton Inconnu');
+                    });
+                });
+            },
+            
+            logAction(type, detail) {
+                const now = new Date();
+                this.data.logs.unshift({ time: now.toLocaleString(), type, detail });
+                if(this.data.logs.length > 50) this.data.logs.pop(); // Garder les 50 derniers
+                this.save();
+            },
+            
+            trackProductView(productName) {
+                this.data.products_viewed++;
+                this.logAction('Vue Produit', productName);
+            },
+            
+            save() {
+                localStorage.setItem('kiyojo_stats', JSON.stringify(this.data));
             }
+        };
 
-            // Lancer la récupération de données
-            fetchData(type);
-        }
+        // --- INITIALISATION UI ---
+        window.addEventListener('load', () => {
+            Tracker.init();
+            
+            // Animation du loader
+            const bar = document.getElementById('loader-bar');
+            bar.style.width = '100%';
+            setTimeout(() => {
+                const loader = document.getElementById('page-loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 1000);
 
-        function goHome() {
-            // Retour à l'accueil
-            viewItems.classList.add('view-hidden');
-            viewHome.classList.remove('view-hidden');
-            window.scrollTo(0, 0);
-        }
+            // Intersection Observer pour les animations au scroll (reveal)
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Ne jouer qu'une fois
+                    }
+                });
+            }, { threshold: 0.1 });
 
-        /* --- 3. FETCH DONNÉES (Google Sheets -> PapaParse) --- */
-        function fetchData(type) {
-            Papa.parse(urls[type], {
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            
+            // Écouter le hash url pour l'admin
+            checkAdminHash();
+            window.addEventListener('hashchange', checkAdminHash);
+        });
+
+        // Menu Mobile
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(a => {
+            a.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+        });
+
+        // --- FETCH & MODAL LOGIC (GOOGLE SHEETS) ---
+        function openServices(type) {
+            const modal = document.getElementById('data-modal');
+            const loader = document.getElementById('modal-loader');
+            const container = document.getElementById('modal-data-container');
+            const title = document.getElementById('modal-title');
+            
+            modal.classList.add('active');
+            loader.classList.remove('hidden');
+            container.classList.add('hidden');
+            container.innerHTML = '';
+            document.body.style.overflow = 'hidden'; // Bloquer le scroll du fond
+
+            const url = type === 'marketing' ? URL_CSV_MARKETING : URL_CSV_VIDEO;
+            title.innerText = type === 'marketing' ? "Produits Marketing Digital" : "Services Montage Vidéo";
+
+            Papa.parse(url, {
                 download: true,
                 header: true,
-                skipEmptyLines: true,
                 complete: function(results) {
-                    loaderContainer.style.display = "none";
-                    const data = results.data;
-                    
-                    data.forEach((item, index) => {
-                        const card = document.createElement('div');
-                        card.className = 'item-card glass';
-                        card.style.animation = `fadeUpAnim 0.5s ease forwards ${index * 0.1}s`;
-
-                        let titre, desc, prix, boutonHTML;
-
-                        // LOGIQUE STRICTE POUR MARKETING
-                        if (type === 'marketing') {
-                            titre = item.Nom_Produit || "Produit sans nom";
-                            desc = item.Description || "Description non disponible";
-                            prix = item.Prix || "Prix non défini";
-                            const lienURL = item.URL ? item.URL : "#";
-                            
-                            // Bouton "Voir le produit" uniquement
-                            boutonHTML = `
-                                <a href="${lienURL}" class="btn-action-primary" target="_blank">
-                                    Voir le produit
-                                </a>
-                            `;
-                        } 
-                        // LOGIQUE STRICTE POUR MONTAGE VIDÉO
-                        else {
-                            titre = item.Titre_Service || "Service sans titre";
-                            desc = item.Description || "Description non disponible";
-                            prix = item.Prix || "Sur devis";
-                            
-                            const waMessage = encodeURIComponent(`Bonjour Jonathan, je suis intéressé par le service vidéo : ${titre}.`);
-                            const waLink = `https://wa.me/${phone}?text=${waMessage}`;
-
-                            // Bouton WhatsApp uniquement
-                            boutonHTML = `
-                                <a href="${waLink}" class="btn-action-wa" target="_blank">
-                                    <i class="fab fa-whatsapp"></i> Discuter
-                                </a>
-                            `;
-                        }
-
-                        // Assemblage final de la carte
-                        card.innerHTML = `
-                            <h3>${titre}</h3>
-                            <div class="price">${prix}</div>
-                            <p>${desc}</p>
-                            <div style="margin-top: auto;">
-                                ${boutonHTML}
-                            </div>
-                        `;
-                        dataContainer.appendChild(card);
-                    });
+                    renderCards(results.data, type);
+                    loader.classList.add('hidden');
+                    container.classList.remove('hidden');
                 },
-                error: function() {
-                    loaderContainer.style.display = "none";
-                    dataContainer.innerHTML = "<p style='color:#ff6b6b; text-align:center;'>Erreur de connexion à la base de données. Veuillez réessayer plus tard.</p>";
+                error: function(error) {
+                    loader.innerHTML = `<p class="text-red-500"><i class="fas fa-exclamation-triangle"></i> Erreur de chargement des données. Veuillez réessayer.</p>`;
                 }
             });
         }
 
-        /* --- 4. ANIMATIONS AU SCROLL & COMPTEURS --- */
-        const observerOptions = { threshold: 0.1 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    // Déclencheur des stats
-                    if(entry.target.classList.contains('stats-section') && !entry.target.dataset.animated) {
-                        startCounters();
-                        entry.target.dataset.animated = "true";
-                    }
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in, .stats-section').forEach(el => observer.observe(el));
-
-        function animateValue(obj, start, end, duration, isFloat=false) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                let current = progress * (end - start) + start;
-                obj.innerHTML = isFloat ? current.toFixed(1) : Math.floor(current);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    if(isFloat) obj.innerHTML += "%"; 
-                }
-            };
-            window.requestAnimationFrame(step);
+        function closeModal() {
+            document.getElementById('data-modal').classList.remove('active');
+            document.body.style.overflow = 'auto'; // Rétablir le scroll
         }
 
-        function startCounters() {
-            document.querySelectorAll('.counter').forEach(counter => {
-                const target = parseInt(counter.getAttribute('data-target'));
-                animateValue(counter, 0, target, 2000, false);
+        function renderCards(data, type) {
+            const container = document.getElementById('modal-data-container');
+            data.forEach(item => {
+                // Ignorer les lignes vides
+                if(!item.Nom_Produit && !item.Titre_Service) return;
+
+                const name = item.Nom_Produit || item.Titre_Service || 'Service sans nom';
+                const desc = item.Description || 'Aucune description disponible.';
+                const price = item.Prix || 'Sur devis';
+                const link = item.URL || `https://wa.me/1234567890?text=Bonjour, je suis intéressé par : ${name}`;
+                
+                const btnText = type === 'marketing' ? "Voir le produit" : "Discuter du projet";
+                const btnIcon = type === 'marketing' ? "fa-external-link-alt" : "fa-whatsapp";
+
+                const card = document.createElement('div');
+                card.className = "bg-surface border border-gray-100 p-6 rounded-2xl flex flex-col hover:shadow-lg transition group";
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <h4 class="text-xl font-heading font-bold text-dark mb-2">${name}</h4>
+                        <p class="text-gray-500 text-sm mb-4 leading-relaxed">${desc}</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <div class="text-2xl font-bold text-primary mb-4">${price}</div>
+                        <a href="${link}" target="_blank" onclick="Tracker.trackProductView('${name}')" class="block w-full text-center bg-dark text-white py-3 rounded-lg font-semibold hover:bg-primary transition group-hover:scale-105">
+                            <i class="fas ${btnIcon} mr-2"></i> ${btnText}
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
             });
-            document.querySelectorAll('.counter-float').forEach(counter => {
-                const target = parseFloat(counter.getAttribute('data-target'));
-                animateValue(counter, 0, target, 2000, true);
-            });
+        }
+
+        // --- SLIDER LOGIC ---
+        let currentSlide = 0;
+        function moveSlider(direction) {
+            const track = document.getElementById('testimonial-track');
+            const slides = track.children;
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+        // Auto slide
+        setInterval(() => moveSlider(1), 5000);
+
+        // --- FAQ LOGIC ---
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Fermer tous les autres
+            document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+            
+            // Ouvrir celui cliqué si pas déjà actif
+            if(!isActive) item.classList.add('active');
+        }
+
+        // --- ADMIN DASHBOARD LOGIC (GHOST ZONE) ---
+        // Accès 1 : via l'url #admin
+        function checkAdminHash() {
+            if(window.location.hash === '#admin') {
+                promptAdmin();
+                // Nettoyer l'URL
+                history.replaceState(null, null, ' ');
+            }
+        }
+
+        // Accès 2 : Triple clic sur le copyright
+        let clickCount = 0;
+        document.getElementById('copyright-trigger').addEventListener('click', () => {
+            clickCount++;
+            if(clickCount >= 3) { clickCount = 0; promptAdmin(); }
+            setTimeout(() => clickCount = 0, 2000); // reset après 2s
+        });
+
+        function promptAdmin() {
+            const code = prompt("Accès restreint. Mot de passe (astuce: 0000) :");
+            if(code === "0000") openAdmin();
+            else if(code) alert("Code incorrect.");
+        }
+
+        function openAdmin() {
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            updateAdminStats();
+        }
+
+        function closeAdmin() {
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateAdminStats() {
+            const d = Tracker.data;
+            document.getElementById('stat-views').innerText = d.views;
+            document.getElementById('stat-clicks').innerText = d.clicks;
+            document.getElementById('stat-products').innerText = d.products_viewed;
+            
+            const rate = d.views > 0 ? Math.round((d.clicks / d.views) * 100) : 0;
+            document.getElementById('stat-rate').innerText = `${rate}%`;
+
+            const tbody = document.getElementById('admin-log-table');
+            tbody.innerHTML = d.logs.map(log => `
+                <tr class="border-b border-gray-800">
+                    <td class="px-4 py-3">${log.time}</td>
+                    <td class="px-4 py-3"><span class="bg-gray-800 px-2 py-1 rounded text-xs text-primary">${log.type}</span></td>
+                    <td class="px-4 py-3">${log.detail}</td>
+                </tr>
+            `).join('');
         }
     </script>
 </body>
