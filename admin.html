@@ -42,6 +42,118 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        /* LOGIN SCREEN */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .login-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            animation: slideInUp 0.8s ease;
+            box-shadow: 0 8px 32px rgba(30, 144, 255, 0.2);
+        }
+
+        .login-box h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-box p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(30, 144, 255, 0.1);
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.3);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--light-blue) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        /* DASHBOARD */
+        .admin-dashboard {
+            display: none;
+        }
+
+        .admin-dashboard.active {
+            display: block;
+        }
 
         /* HEADER */
         header {
@@ -85,6 +197,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .header-info a:hover {
@@ -285,6 +398,7 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
+            .login-box { padding: 30px; }
             header {
                 flex-direction: column;
                 gap: 15px;
@@ -338,134 +452,187 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <i class="fas fa-chart-line"></i> KIYOJO ADMIN
-        </div>
-        <div class="header-info">
-            <a href="https://wa.me/243827445800" target="_blank">
-                <i class="fab fa-whatsapp"></i> Support
-            </a>
-            <a href="mailto:joe489581@gmail.com">
-                <i class="fas fa-envelope"></i> Email
-            </a>
-            <a href="index.html">
-                <i class="fas fa-home"></i> Retour Site
-            </a>
-        </div>
-    </header>
-
-    <div class="container">
-        <h1>📊 Dashboard Analytics</h1>
-        <p class="subtitle">Statistiques et performances du site KIYOJO ACADÉMIA</p>
-
-        <!-- STATS -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-card-icon info"><i class="fas fa-eye"></i></div>
-                <h3>Vues Totales</h3>
-                <div class="stat-value" id="totalViews">-</div>
-                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +12% ce mois</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-card-icon success"><i class="fas fa-mouse-pointer"></i></div>
-                <h3>Clics Produits</h3>
-                <div class="stat-value" id="totalClicks">-</div>
-                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +8% ce mois</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-card-icon warning"><i class="fas fa-envelope"></i></div>
-                <h3>Messages WhatsApp</h3>
-                <div class="stat-value" id="whatsappMessages">-</div>
-                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +25% ce mois</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-card-icon danger"><i class="fas fa-clock"></i></div>
-                <h3>Temps Moyen</h3>
-                <div class="stat-value">2m 34s</div>
-                <div class="stat-trend down"><i class="fas fa-arrow-down"></i> -3% ce mois</div>
-            </div>
-        </div>
-
-        <!-- CHARTS -->
-        <div class="charts-section">
-            <div class="chart-card">
-                <h3>📈 Visites par Jour (7 derniers jours)</h3>
-                <canvas id="visitsChart"></canvas>
-            </div>
-
-            <div class="chart-card">
-                <h3>🎯 Engagement par Section</h3>
-                <canvas id="engagementChart"></canvas>
-            </div>
-
-            <div class="chart-card">
-                <h3>📱 Traffic par Appareil</h3>
-                <canvas id="deviceChart"></canvas>
-            </div>
-
-            <div class="chart-card">
-                <h3>🌍 Top Pays</h3>
-                <canvas id="countriesChart"></canvas>
-            </div>
-        </div>
-
-        <!-- ACTIVITY -->
-        <div class="activity-section">
-            <h3>📋 Activité Récente</h3>
-            <table class="activity-table">
-                <thead>
-                    <tr>
-                        <th>Heure</th>
-                        <th>Action</th>
-                        <th>Utilisateur</th>
-                        <th>Statut</th>
-                    </tr>
-                </thead>
-                <tbody id="activityTable">
-                    <tr>
-                        <td colspan="4" class="loading"><i class="fas fa-spinner"></i> Chargement...</td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- LOGIN FORM -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <h1>🔐 Admin Dashboard</h1>
+            <p>Accès réservé aux administrateurs</p>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Entrez le mot de passe" required>
+                </div>
+                <button type="submit" class="btn-login">Se Connecter</button>
+                <div class="error-msg" id="errorMsg">❌ Mot de passe incorrect</div>
+            </form>
         </div>
     </div>
 
-    <footer>
-        <p>© 2024 KIYOJO ACADÉMIA | 
-            <a href="mailto:joe489581@gmail.com" class="footer-link">joe489581@gmail.com</a> | 
-            <a href="https://wa.me/243827445800" class="footer-link" target="_blank">+243 827 445 800</a>
-        </p>
-    </footer>
+    <!-- DASHBOARD (Hidden by default) -->
+    <div class="admin-dashboard" id="dashboard">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i> KIYOJO ADMIN
+            </div>
+            <div class="header-info">
+                <a href="https://wa.me/243827445800" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Support
+                </a>
+                <a href="mailto:joe489581@gmail.com">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+                <a href="index.html">
+                    <i class="fas fa-home"></i> Retour Site
+                </a>
+                <a onclick="logout()" style="cursor: pointer; color: var(--danger);">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </div>
+        </header>
+
+        <div class="container">
+            <h1>📊 Dashboard Analytics</h1>
+            <p class="subtitle">Statistiques et performances du site KIYOJO ACADÉMIA</p>
+
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon info"><i class="fas fa-eye"></i></div>
+                    <h3>Vues Totales</h3>
+                    <div class="stat-value" id="totalViews">-</div>
+                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +12% ce mois</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon success"><i class="fas fa-mouse-pointer"></i></div>
+                    <h3>Clics Produits</h3>
+                    <div class="stat-value" id="totalClicks">-</div>
+                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +8% ce mois</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon warning"><i class="fas fa-envelope"></i></div>
+                    <h3>Messages WhatsApp</h3>
+                    <div class="stat-value" id="whatsappMessages">-</div>
+                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +25% ce mois</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon danger"><i class="fas fa-clock"></i></div>
+                    <h3>Temps Moyen</h3>
+                    <div class="stat-value">2m 34s</div>
+                    <div class="stat-trend down"><i class="fas fa-arrow-down"></i> -3% ce mois</div>
+                </div>
+            </div>
+
+            <!-- CHARTS -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <h3>📈 Visites par Jour (7 derniers jours)</h3>
+                    <canvas id="visitsChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3>🎯 Engagement par Section</h3>
+                    <canvas id="engagementChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3>📱 Traffic par Appareil</h3>
+                    <canvas id="deviceChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3>🌍 Top Pays</h3>
+                    <canvas id="countriesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- ACTIVITY -->
+            <div class="activity-section">
+                <h3>📋 Activité Récente</h3>
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>Heure</th>
+                            <th>Action</th>
+                            <th>Utilisateur</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityTable">
+                        <tr>
+                            <td colspan="4" class="loading"><i class="fas fa-spinner"></i> Chargement...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 KIYOJO ACADÉMIA | 
+                <a href="mailto:joe489581@gmail.com" class="footer-link">joe489581@gmail.com</a> | 
+                <a href="https://wa.me/243827445800" class="footer-link" target="_blank">+243 827 445 800</a>
+            </p>
+        </footer>
+    </div>
 
     <script>
-        // DONNÉES SIMULÉES (À CONNECTER AVEC UNE API RÉELLE)
-        const mockData = {
-            views: Math.floor(Math.random() * 5000) + 2000,
-            clicks: Math.floor(Math.random() * 500) + 100,
-            whatsapp: Math.floor(Math.random() * 150) + 30,
-            activities: [
-                { time: '14:32', action: 'Consulté Produits', user: 'Utilisateur 1', status: 'success' },
-                { time: '14:15', action: 'Cliqué WhatsApp', user: 'Utilisateur 2', status: 'success' },
-                { time: '13:48', action: 'Visité Services', user: 'Utilisateur 3', status: 'success' },
-                { time: '13:22', action: 'Message Email', user: 'Utilisateur 4', status: 'pending' },
-                { time: '12:55', action: 'Téléchargement', user: 'Utilisateur 5', status: 'error' },
-                { time: '12:30', action: 'Formulaire Envoyé', user: 'Utilisateur 6', status: 'success' },
-                { time: '12:10', action: 'Visite Bio', user: 'Utilisateur 7', status: 'success' },
-                { time: '11:45', action: 'Scroll Produits', user: 'Utilisateur 8', status: 'success' },
-            ]
-        };
+        const ADMIN_PASSWORD = 'Kiyojo2024'; // À modifier dans les paramètres secrets
 
-        // AFFICHER LES STATS
-        document.getElementById('totalViews').textContent = mockData.views.toLocaleString();
-        document.getElementById('totalClicks').textContent = mockData.clicks.toLocaleString();
-        document.getElementById('whatsappMessages').textContent = mockData.whatsapp.toLocaleString();
+        function handleLogin(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
 
-        // CHARGER L'ACTIVITÉ
-        function loadActivity() {
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('adminLogged', 'true');
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                initDashboard();
+                errorMsg.classList.remove('show');
+            } else {
+                errorMsg.classList.add('show');
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminLogged');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+        }
+
+        function checkAuth() {
+            if (sessionStorage.getItem('adminLogged') === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                initDashboard();
+            }
+        }
+
+        function initDashboard() {
+            const mockData = {
+                views: Math.floor(Math.random() * 5000) + 2000,
+                clicks: Math.floor(Math.random() * 500) + 100,
+                whatsapp: Math.floor(Math.random() * 150) + 30,
+                activities: [
+                    { time: '14:32', action: 'Consulté Produits', user: 'Visiteur 1', status: 'success' },
+                    { time: '14:15', action: 'Cliqué WhatsApp', user: 'Visiteur 2', status: 'success' },
+                    { time: '13:48', action: 'Visité Services', user: 'Visiteur 3', status: 'success' },
+                    { time: '13:22', action: 'Message Email', user: 'Visiteur 4', status: 'pending' },
+                    { time: '12:55', action: 'Enregistrement', user: 'Visiteur 5', status: 'success' },
+                    { time: '12:30', action: 'Formulaire Envoyé', user: 'Visiteur 6', status: 'success' },
+                    { time: '12:10', action: 'Visite Bio', user: 'Visiteur 7', status: 'success' },
+                    { time: '11:45', action: 'Consulté Produits', user: 'Visiteur 8', status: 'success' },
+                ]
+            };
+
+            document.getElementById('totalViews').textContent = mockData.views.toLocaleString();
+            document.getElementById('totalClicks').textContent = mockData.clicks.toLocaleString();
+            document.getElementById('whatsappMessages').textContent = mockData.whatsapp.toLocaleString();
+
             const tbody = document.getElementById('activityTable');
             tbody.innerHTML = mockData.activities.map(act => `
                 <tr>
@@ -475,91 +642,78 @@
                     <td><span class="badge ${act.status}">${act.status === 'success' ? '✓ Succès' : act.status === 'pending' ? '⏳ En attente' : '✗ Erreur'}</span></td>
                 </tr>
             `).join('');
+
+            createCharts();
         }
 
-        // CHARTS
-        const chartConfig = {
-            plugins: {
-                legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } }
-            },
-            scales: {
-                y: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } },
-                x: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
-            }
-        };
+        function createCharts() {
+            const chartConfig = {
+                plugins: {
+                    legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } }
+                },
+                scales: {
+                    y: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } },
+                    x: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
+                }
+            };
 
-        // VISITES
-        const visitsCtx = document.getElementById('visitsChart').getContext('2d');
-        new Chart(visitsCtx, {
-            type: 'line',
-            data: {
-                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-                datasets: [{
-                    label: 'Visites',
-                    data: [320, 480, 420, 580, 490, 720, 650],
-                    borderColor: '#1E90FF',
-                    backgroundColor: 'rgba(30, 144, 255, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: chartConfig
-        });
+            new Chart(document.getElementById('visitsChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                    datasets: [{
+                        label: 'Visites',
+                        data: [320, 480, 420, 580, 490, 720, 650],
+                        borderColor: '#1E90FF',
+                        backgroundColor: 'rgba(30, 144, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: chartConfig
+            });
 
-        // ENGAGEMENT
-        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
-        new Chart(engagementCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Produits', 'Services', 'Bio', 'Contact', 'Autres'],
-                datasets: [{
-                    data: [35, 25, 20, 15, 5],
-                    backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF', '#25D366', '#FFA500']
-                }]
-            },
-            options: { plugins: { legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } } } }
-        });
+            new Chart(document.getElementById('engagementChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Produits', 'Services', 'Bio', 'Contact', 'Autres'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF', '#25D366', '#FFA500']
+                    }]
+                },
+                options: { plugins: { legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } } } }
+            });
 
-        // DEVICE
-        const deviceCtx = document.getElementById('deviceChart').getContext('2d');
-        new Chart(deviceCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Mobile', 'Desktop', 'Tablet'],
-                datasets: [{
-                    label: 'Nombre de visites',
-                    data: [2400, 1800, 600],
-                    backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF']
-                }]
-            },
-            options: chartConfig
-        });
+            new Chart(document.getElementById('deviceChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Mobile', 'Desktop', 'Tablet'],
+                    datasets: [{
+                        label: 'Visites',
+                        data: [2400, 1800, 600],
+                        backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF']
+                    }]
+                },
+                options: chartConfig
+            });
 
-        // PAYS
-        const countriesCtx = document.getElementById('countriesChart').getContext('2d');
-        new Chart(countriesCtx, {
-            type: 'bar',
-            data: {
-                labels: ['RDC', 'Burundi', 'Uganda', 'Kenya', 'Autres'],
-                datasets: [{
-                    label: 'Visites',
-                    data: [3200, 1800, 1200, 800, 1000],
-                    backgroundColor: '#1E90FF'
-                }]
-            },
-            options: chartConfig
-        });
+            new Chart(document.getElementById('countriesChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['RDC', 'Burundi', 'Uganda', 'Kenya', 'Autres'],
+                    datasets: [{
+                        label: 'Visites',
+                        data: [3200, 1800, 1200, 800, 1000],
+                        backgroundColor: '#1E90FF'
+                    }]
+                },
+                options: chartConfig
+            });
+        }
 
-        // CHARGER L'ACTIVITÉ AU DÉMARRAGE
-        loadActivity();
-
-        // SIMULER LA MISE À JOUR EN TEMPS RÉEL
-        setInterval(() => {
-            const randomView = Math.floor(Math.random() * 50);
-            const currentViews = parseInt(document.getElementById('totalViews').textContent.replace(/,/g, ''));
-            document.getElementById('totalViews').textContent = (currentViews + randomView).toLocaleString();
-        }, 5000);
+        window.addEventListener('load', checkAuth);
     </script>
 </body>
 </html>
