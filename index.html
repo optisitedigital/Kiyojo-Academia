@@ -622,6 +622,7 @@
             border-radius: 12px;
             text-align: center;
             animation: fadeInUp 0.8s ease;
+            transition: all 0.3s ease;
         }
 
         .review-stars {
@@ -932,10 +933,10 @@
                 Bienvenue chez KIYOJO ACADÉMIA, votre partenaire dans le marketing digital et le montage vidéo professionnel. Nous aidons les entrepreneurs, créateurs de contenu et entreprises à développer leur présence en ligne grâce à des services de qualité.
             </p>
             <div class="hero-buttons">
-                <button class="btn btn-primary" onclick="document.getElementById('products-modal').classList.add('active')">
+                <button class="btn btn-primary" onclick="trackVisit('hero'); document.getElementById('products-modal').classList.add('active')">
                     <i class="fas fa-shopping-bag"></i> Marketing Digital
                 </button>
-                <button class="btn btn-primary" onclick="document.getElementById('services-modal').classList.add('active')">
+                <button class="btn btn-primary" onclick="trackVisit('hero'); document.getElementById('services-modal').classList.add('active')">
                     <i class="fas fa-video"></i> Monteur Vidéo
                 </button>
                 <a href="https://wa.me/243827445800?text=Bonjour%20KIYOJO!" class="btn btn-whatsapp">
@@ -987,10 +988,10 @@
             <p class="section-subtitle">Choisissez le service qui correspond à vos besoins</p>
             
             <div class="services-buttons">
-                <button class="service-category-btn" onclick="document.getElementById('products-modal').classList.add('active')">
+                <button class="service-category-btn" onclick="trackVisit('services'); document.getElementById('products-modal').classList.add('active')">
                     <i class="fas fa-chart-line"></i> Marketing Digital
                 </button>
-                <button class="service-category-btn" onclick="document.getElementById('services-modal').classList.add('active')">
+                <button class="service-category-btn" onclick="trackVisit('services'); document.getElementById('services-modal').classList.add('active')">
                     <i class="fas fa-film"></i> Montage Vidéo
                 </button>
             </div>
@@ -1126,8 +1127,16 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loadingScreen').classList.add('hidden');
+                trackVisit('hero'); // Premier tracking quand le site charge
             }, 2000);
         });
+
+        // TRACKING (Appel depuis admin.html)
+        function trackVisit(section = null) {
+            if (typeof window.trackVisit === 'function') {
+                window.trackVisit(section);
+            }
+        }
 
         // LOAD CSV DATA
         function loadCSV(url, containerId, isProduct = true) {
@@ -1244,6 +1253,7 @@
         const statsObserver = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 animateCounters();
+                trackVisit('stats'); // Track stats viewing
                 statsObserver.unobserve(entries[0].target);
             }
         }, { threshold: 0.5 });
@@ -1274,6 +1284,7 @@
         function rotateReview(direction) {
             const reviewCard = document.querySelector('.review-card');
             reviewCard.style.opacity = '0';
+            trackVisit('reviews'); // Track review viewing
             
             setTimeout(() => {
                 currentReview = (currentReview + direction + reviews.length) % reviews.length;
@@ -1320,12 +1331,27 @@
                 });
             });
 
-        // SMOOTHSCROLL POLYFILL FOR OLDER BROWSERS
-        if (!('scrollBehavior' in document.documentElement.style)) {
-            window.addEventListener('scroll', () => {
-                document.documentElement.style.scrollBehavior = 'auto';
+        // TRACKING SECTIONS ON SCROLL
+        const trackingSections = {
+            'hero': document.getElementById('hero'),
+            'bio': document.getElementById('bio'),
+            'services': document.getElementById('services'),
+            'reviews': document.getElementById('reviews'),
+            'contact': document.getElementById('contact')
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    trackVisit(sectionId);
+                }
             });
-        }
+        }, { threshold: 0.3 });
+
+        Object.values(trackingSections).forEach(section => {
+            if (section) sectionObserver.observe(section);
+        });
     </script>
 </body>
 </html>
