@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIYOJO ACADÉMIA | Transforme ton avenir digital</title>
-    <meta name="description" content="Marketing digital & montage vidéo premium par Jonathan Kiyojo.">
+    <title>KIYOJO ACADÉMIA | Agence de Croissance Digitale</title>
     
-    <!-- Intégration du Favicon local -->
-    <link rel="icon" type="image/jpg" href="logo.jpg">
-
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    
+    <!-- Tailwind CSS pour des styles de classe mondiale -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <!-- FontAwesome pour les icônes de haute qualité -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Outfit pour le côté moderne & Playfair Display pour l'élégance -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- PapaParse pour lire les CSV sans bugs de délimiteurs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2563eb', // Bleu électrique
-                        dark: '#0f172a', // Noir / Bleu nuit profond
-                        light: '#ffffff', // Blanc
-                        surface: '#f8fafc' // Gris très clair pour les fonds
+                        brand: {
+                            blue: '#2563eb',       /* Bleu Électrique */
+                            darkBlue: '#1e3a8a',   /* Bleu Nuit */
+                            navy: '#0f172a',       /* Bleu Sombre */
+                            black: '#09090b',      /* Noir Pur */
+                            lightBg: '#f8fafc',    /* Blanc Cassé */
+                            accent: '#3b82f6'
+                        }
                     },
                     fontFamily: {
-                        heading: ['Poppins', 'sans-serif'],
-                        body: ['Inter', 'sans-serif']
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
                     }
                 }
             }
@@ -34,745 +41,995 @@
     </script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
-        
-        /* Animations de base */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        
-        /* Loader de démarrage */
-        #page-loader {
-            position: fixed; inset: 0; background: #0f172a; z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease;
+        .backdrop-blur-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
-        .loader-logo { font-size: 3rem; color: white; font-family: 'Poppins', sans-serif; font-weight: 700; letter-spacing: 2px; }
-        .loader-dot { color: #2563eb; animation: blink 1.5s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* Effets Premium */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* Style des animations au défilement */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
-        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); }
-        
-        /* Modal pour les services */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px);
-            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
-            display: flex; align-items: center; justify-content: center; padding: 1rem;
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content {
-            background: white; width: 100%; max-width: 1000px; max-height: 90vh; overflow-y: auto;
-            border-radius: 1rem; transform: scale(0.95); transition: all 0.3s ease;
+        /* Slider infini horizontal */
+        .slider-track {
+            display: flex;
+            width: calc(350px * 10);
+            animation: scroll 30s linear infinite;
         }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-
-        /* Slider Témoignages */
-        .slider-container { overflow: hidden; position: relative; width: 100%; }
-        .slider-track { display: flex; transition: transform 0.5s ease-in-out; }
-        .slide { min-width: 100%; padding: 1rem; }
-
-        /* FAQ Accordéon */
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
-        .faq-item.active .faq-answer { max-height: 500px; }
-        .faq-item.active .faq-icon { transform: rotate(180deg); }
+        .slider-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-350px * 5)); }
+        }
     </style>
 </head>
-<body class="bg-surface text-dark antialiased">
+<body class="bg-brand-lightBg text-brand-navy font-sans selection:bg-brand-blue selection:text-white overflow-x-hidden">
 
-    <div id="page-loader">
-        <div class="loader-logo">KIYOJO<span class="loader-dot">.</span></div>
-        <div class="mt-4 w-48 h-1 bg-gray-800 rounded-full overflow-hidden">
-            <div class="h-full bg-primary w-0 transition-all duration-1000 ease-out" id="loader-bar"></div>
+    <!-- ÉCRAN DE CHARGEMENT PREMIUM -->
+    <div id="loader" class="fixed inset-0 z-[9999] bg-brand-black flex flex-col justify-center items-center transition-all duration-700">
+        <div class="text-center space-y-6">
+            <div class="relative w-28 h-28 mx-auto">
+                <!-- Logo centralisé -->
+                <img src="logo.jpg" alt="KIYOJO ACADÉMIA" class="w-full h-full object-cover rounded-full border-4 border-brand-blue animate-pulse" onerror="this.src='https://placehold.co/150x150/2563eb/ffffff?text=KA';">
+                <div class="absolute inset-0 border-4 border-t-transparent border-brand-blue rounded-full animate-spin"></div>
+            </div>
+            <div>
+                <h2 class="text-white text-2xl font-extrabold tracking-widest font-sans">KIYOJO ACADÉMIA</h2>
+                <p class="text-brand-blue text-xs uppercase tracking-[0.3em] mt-1">L'excellence digitale</p>
+            </div>
         </div>
     </div>
 
-    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="flex items-center gap-3 text-2xl font-heading font-bold tracking-wide">
-                <img src="logo.jpg" alt="Logo" class="w-10 h-10 rounded-full object-cover border-2 border-primary/20" onerror="this.style.display='none'">
-                <span>KIYOJO<span class="text-primary">.</span></span>
-            </a>
-            
-            <!-- Menu Desktop -->
-            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-600">
-                <a href="#about" class="hover:text-primary transition track-click" data-label="Nav: Qui sommes-nous">Qui sommes-nous</a>
-                <a href="#why-us" class="hover:text-primary transition track-click" data-label="Nav: Pourquoi nous">Pourquoi nous</a>
-                <a href="#services" class="hover:text-primary transition track-click" data-label="Nav: Services">Services</a>
-                <a href="#faq" class="hover:text-primary transition track-click" data-label="Nav: FAQ">FAQ</a>
-                <a href="#contact" class="bg-dark text-white px-5 py-2.5 rounded-lg hover:bg-primary transition track-click" data-label="Nav: Contact CTA">Contactez-nous</a>
-            </div>
-
-            <!-- Bouton Mobile -->
-            <button class="md:hidden text-2xl text-dark relative z-[60] focus:outline-none hover:text-primary transition-colors" id="mobile-menu-btn">
-                <i class="fas fa-bars transition-transform duration-300" id="mobile-menu-icon"></i>
-            </button>
-        </div>
-        
-        <!-- Fond flouté pour le menu mobile -->
-        <div id="mobile-menu-overlay" class="fixed inset-0 bg-dark/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
-
-        <!-- Menu Mobile Premium (Tiroir coulissant) -->
-        <div id="mobile-menu" class="fixed top-0 right-0 h-screen w-[85%] max-w-sm bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col p-8 pt-6 border-l border-gray-100">
-            <div class="flex items-center gap-3 mb-8 border-b border-gray-100 pb-4 mt-6">
-                <img src="logo.jpg" alt="Logo" class="w-10 h-10 rounded-full object-cover border-2 border-primary/20" onerror="this.style.display='none'">
-                <span class="text-2xl font-heading font-bold tracking-wide text-dark">KIYOJO<span class="text-primary">.</span></span>
-            </div>
-            
-            <div class="flex flex-col gap-2">
-                <a href="#about" class="mobile-link text-xl font-heading font-semibold text-dark py-4 border-b border-gray-50 hover:text-primary hover:pl-2 transition-all">Qui sommes-nous</a>
-                <a href="#why-us" class="mobile-link text-xl font-heading font-semibold text-dark py-4 border-b border-gray-50 hover:text-primary hover:pl-2 transition-all">Pourquoi nous</a>
-                <a href="#services" class="mobile-link text-xl font-heading font-semibold text-dark py-4 border-b border-gray-50 hover:text-primary hover:pl-2 transition-all">Services</a>
-                <a href="#faq" class="mobile-link text-xl font-heading font-semibold text-dark py-4 border-b border-gray-50 hover:text-primary hover:pl-2 transition-all">FAQ</a>
-            </div>
-            
-            <a href="#contact" class="mobile-link text-lg font-heading font-semibold bg-dark text-white text-center py-4 mt-8 rounded-xl hover:bg-primary transition-all shadow-lg hover:shadow-primary/30">
-                Contactez-nous
+    <!-- EN-TÊTE FIXE -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-white/80 backdrop-blur-nav border-b border-slate-100 transition-all duration-300" id="main-header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+            <!-- Logo avec logo.jpg -->
+            <a href="#view-home" onclick="goHome()" class="flex items-center gap-3 group">
+                <img src="logo.jpg" alt="KIYOJO ACADÉMIA" class="w-11 h-11 object-cover rounded-full border-2 border-brand-blue transition-transform duration-300 group-hover:scale-110" onerror="this.src='https://placehold.co/100x100/2563eb/ffffff?text=KA';">
+                <div class="flex flex-col">
+                    <span class="text-lg font-extrabold tracking-tight text-brand-navy leading-none">KIYOJO <span class="text-brand-blue">ACADÉMIA</span></span>
+                    <span class="text-[9px] tracking-[0.25em] text-slate-400 uppercase">Cabinet de croissance</span>
+                </div>
             </a>
 
-            <!-- Réseaux sociaux intégrés en bas du menu mobile -->
-            <div class="mt-auto border-t border-gray-100 pt-8 text-center">
-                <p class="text-sm text-gray-500 mb-4">Retrouvez-nous sur</p>
-                <div class="flex justify-center gap-6 text-gray-400">
-                    <a href="#" class="hover:text-primary text-xl transition-colors"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-primary text-xl transition-colors"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="hover:text-primary text-xl transition-colors"><i class="fab fa-youtube"></i></a>
-                </div>
+            <!-- Navigation Desktop -->
+            <nav class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide">
+                <a href="#accueil" onclick="goHome()" class="hover:text-brand-blue transition-colors">Accueil</a>
+                <a href="#biographie" onclick="goHome()" class="hover:text-brand-blue transition-colors">À Propos</a>
+                <a href="#avantages" onclick="goHome()" class="hover:text-brand-blue transition-colors">Pourquoi nous ?</a>
+                <a href="#portails" onclick="goHome()" class="hover:text-brand-blue transition-colors">Nos Solutions</a>
+                <a href="#testimonials" onclick="goHome()" class="hover:text-brand-blue transition-colors">Témoignages</a>
+                <a href="#faq" onclick="goHome()" class="hover:text-brand-blue transition-colors">FAQ</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center space-x-4">
+                <a href="https://wa.me/243827445800" target="_blank" onclick="trackAction('Clic CTA Header')" class="hidden sm:inline-flex px-5 py-2.5 bg-brand-blue text-white rounded-full font-bold text-xs uppercase tracking-wider hover:bg-brand-darkBlue shadow-lg shadow-brand-blue/20 transition duration-300">
+                    <i class="fa-solid fa-headset mr-2"></i> Session Stratégique
+                </a>
+                <!-- Menu Mobile Hamburger Toggle -->
+                <button onclick="toggleMobileMenu(true)" class="md:hidden p-2 text-brand-navy hover:text-brand-blue transition-colors" aria-label="Menu">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <section id="hero" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden flex items-center min-h-[90vh]">
-        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-surface via-white to-blue-50 -z-10"></div>
-        <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+    <!-- TIROIR MENU MOBILE (SLIDE FROM RIGHT) -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 invisible transition-all duration-300">
+        <!-- Arrière-plan assombri -->
+        <div onclick="toggleMobileMenu(false)" class="absolute inset-0 bg-brand-navy/60 backdrop-blur-sm"></div>
         
-        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-            <div class="text-left">
-                <div class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-semibold text-sm mb-6 reveal">
-                    🚀 Marketing Digital & Montage Vidéo Premium
+        <!-- Panneau coulissant -->
+        <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white p-6 flex flex-col justify-between shadow-2xl transform translate-x-full transition-transform duration-300 ease-out" id="mobile-menu-panel">
+            <div>
+                <div class="flex justify-between items-center pb-6 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <img src="logo.jpg" class="w-10 h-10 object-cover rounded-full" alt="KA" onerror="this.src='https://placehold.co/100x100/2563eb/ffffff?text=KA';">
+                        <span class="text-md font-bold text-brand-navy">KIYOJO ACADÉMIA</span>
+                    </div>
+                    <button onclick="toggleMobileMenu(false)" class="p-2 text-slate-400 hover:text-brand-navy transition-colors">
+                        <i class="fa-solid fa-xmark text-2xl"></i>
+                    </button>
                 </div>
-                <h1 class="text-5xl lg:text-7xl font-heading font-bold leading-tight mb-6 reveal delay-100">
-                    KIYOJO <br><span class="text-primary">ACADÉMIA</span>
+
+                <!-- Navigation liens -->
+                <div class="py-8 flex flex-col space-y-5 text-lg font-semibold">
+                    <a href="#accueil" onclick="toggleMobileMenu(false); goHome();" class="hover:text-brand-blue transition-colors flex items-center gap-3"><i class="fa-solid fa-house text-sm text-slate-400"></i> Accueil</a>
+                    <a href="#biographie" onclick="toggleMobileMenu(false); goHome();" class="hover:text-brand-blue transition-colors flex items-center gap-3"><i class="fa-solid fa-user text-sm text-slate-400"></i> À Propos</a>
+                    <a href="#avantages" onclick="toggleMobileMenu(false); goHome();" class="hover:text-brand-blue transition-colors flex items-center gap-3"><i class="fa-solid fa-circle-check text-sm text-slate-400"></i> Pourquoi Nous ?</a>
+                    <a href="#portails" onclick="toggleMobileMenu(false); goHome();" class="hover:text-brand-blue transition-colors flex items-center gap-3"><i class="fa-solid fa-lightbulb text-sm text-slate-400"></i> Nos Services</a>
+                    <a href="#testimonials" onclick="toggleMobileMenu(false); goHome();" class="hover:text-brand-blue transition-colors flex items-center gap-3"><i class="fa-solid fa-quote-left text-sm text-slate-400"></i> Témoignages</a>
+                    <a href="#faq" onclick="toggleMobileMenu(false); goHome();" class="hover:text-brand-blue transition-colors flex items-center gap-3"><i class="fa-solid fa-circle-question text-sm text-slate-400"></i> FAQ</a>
+                </div>
+            </div>
+
+            <!-- Contacts en bas du menu mobile -->
+            <div class="border-t border-slate-100 pt-6">
+                <a href="https://wa.me/243827445800" target="_blank" onclick="trackAction('Clic WA Mobile Drawer')" class="w-full py-3 bg-brand-blue text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-darkBlue transition-colors mb-4 shadow-lg shadow-brand-blue/15">
+                    <i class="fa-brands fa-whatsapp"></i> Discuter sur WhatsApp
+                </a>
+                <p class="text-xs text-center text-slate-400">&copy; 2026 KIYOJO ACADÉMIA. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENU D'ACCUEIL PRINCIPAL ==================== -->
+    <main id="view-home" class="transition-opacity duration-500">
+        
+        <!-- SECTION HERO (RE-BRANDED PREMIER) -->
+        <section id="accueil" class="relative pt-36 pb-20 md:pt-48 md:pb-32 bg-gradient-to-b from-blue-50/50 to-white overflow-hidden">
+            <div class="absolute top-1/4 left-10 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl -z-10"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue font-semibold text-xs uppercase tracking-wider mx-auto">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-blue animate-pulse"></span> Agence de croissance & solutions digitales
+                </div>
+                
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-brand-navy leading-tight tracking-tight max-w-4xl mx-auto">
+                    Transforme ton avenir digital avec <span class="text-brand-blue font-serif italic font-normal">KIYOJO ACADÉMIA</span>
                 </h1>
-                <p class="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg reveal delay-200">
-                    Transforme ton avenir digital avec KIYOJO ACADÉMIA. Des stratégies prouvées pour scaler votre business.
+                
+                <p class="text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+                    Marketing digital de pointe & montage vidéo premium. Nous construisons des structures persuasives adaptées pour capter l'attention et générer de vrais clients.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 reveal delay-200">
-                    <a href="#services" class="bg-primary text-white text-center px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg shadow-primary/30 track-click" data-label="Hero: Découvrir nos services">
-                        Découvrir nos services
+
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <a href="#portails" onclick="trackAction('Hero - Explorer')" class="px-8 py-4 bg-brand-blue text-white rounded-xl font-bold hover:bg-brand-darkBlue transform hover:-translate-y-1 transition duration-300 shadow-xl shadow-brand-blue/25 flex items-center gap-2">
+                        Découvrir nos services <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
-                    <a href="#contact" class="bg-dark text-white text-center px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 transition shadow-lg track-click" data-label="Hero: Commencer maintenant">
+                    <a href="https://wa.me/243827445800?text=Bonjour%20Jonathan,%20j'aimerais%20commencer%20maintenant%20avec%20votre%20agence." target="_blank" onclick="trackAction('Hero - Commencer')" class="px-8 py-4 bg-white hover:bg-slate-50 text-brand-navy rounded-xl font-bold border border-slate-200 transition duration-300 flex items-center gap-2">
                         Commencer maintenant
                     </a>
                 </div>
             </div>
-            <div class="relative hidden lg:block reveal delay-200">
-                <div class="w-full h-[500px] bg-gradient-to-tr from-dark to-primary rounded-3xl overflow-hidden shadow-2xl relative animate-pulse-slow">
-                    <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                    <div class="absolute inset-0 flex items-center justify-center text-white text-opacity-50 text-9xl">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                </div>
-                <!-- Badge flottant -->
-                <div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-2xl flex items-center gap-4">
-                    <div class="bg-green-100 text-green-600 w-12 h-12 rounded-full flex items-center justify-center text-xl">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Croissance</p>
-                        <p class="font-bold font-heading text-xl">+300%</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="about" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="relative reveal">
-                    <!-- Image de Jonathan Kiyojo avec fallback intelligent -->
-                    <img src="image.jpg" alt="Jonathan Kiyojo" class="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5]" onerror="this.onerror=null; this.src='https://placehold.co/600x700/0f172a/ffffff?text=Jonathan+Kiyojo';">
-                    <div class="absolute top-6 right-6 bg-primary text-white p-4 rounded-xl shadow-lg text-center">
-                        <i class="fas fa-award text-3xl mb-2"></i>
-                        <p class="font-bold text-sm">CEO & Fondateur</p>
+        <!-- SECTION : QUI SOMMES-NOUS ? -->
+        <section id="biographie" class="py-24 bg-white border-y border-slate-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center reveal">
+                <!-- Visuel Profile -->
+                <div class="lg:col-span-5 relative">
+                    <div class="aspect-square bg-slate-100 rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white">
+                        <img src="jonathan.jpg" alt="Jonathan Kiyojo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x600/0f172a/ffffff?text=Jonathan+Kiyojo';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 text-white">
+                            <p class="text-sm tracking-widest uppercase text-brand-blue font-bold">CEO & Fondateur</p>
+                            <h3 class="text-xl font-bold font-serif">Kibwanga Yoan Jonathan</h3>
+                        </div>
                     </div>
                 </div>
-                <div class="reveal delay-100">
-                    <h2 class="text-4xl font-heading font-bold mb-6">L'expertise derrière <span class="text-primary">l'excellence.</span></h2>
-                    <div class="w-20 h-1 bg-primary mb-8"></div>
-                    <p class="text-lg text-gray-600 leading-relaxed mb-6 text-justify">
-                        Je suis <strong class="text-dark">Jonathan Kiyojo</strong>, CEO de KIYOJO ACADÉMIA, de mon vrai nom Kibwanga Yoan Jonathan. Web-entrepreneur et comptable de formation, j’ai embrassé le monde du digital en décembre 2024.
+
+                <!-- Texte Biographie -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="text-xs uppercase tracking-widest font-extrabold text-brand-blue">Le fondateur</div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-navy">Une double expertise au service de votre rentabilité</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Je suis <strong class="text-brand-navy">Jonathan Kiyojo</strong>, CEO de KIYOJO ACADÉMIA, de mon vrai nom Kibwanga Yoan Jonathan. 
                     </p>
-                    <p class="text-lg text-gray-600 leading-relaxed mb-8 text-justify">
-                        Créateur de contenu dans les domaines du business, du développement personnel et de la comptabilité, je suis également le fondateur d’une agence de montage vidéo spécialisée dans les formats courts.
+                    <p class="text-slate-500 leading-relaxed">
+                        Web-entrepreneur et comptable de formation, j’ai embrassé le monde du digital en décembre 2024. Créateur de contenu dans les domaines du business, du développement personnel et de la comptabilité, je suis également le fondateur d’une agence de montage vidéo spécialisée dans les formats courts.
                     </p>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-primary text-xl"><i class="fas fa-briefcase"></i></div>
-                            <span class="font-semibold font-heading">Web-entrepreneur</span>
+                    <div class="pt-4 grid grid-cols-2 gap-4 border-t border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chart-line"></i></span>
+                            <span class="font-bold text-sm text-brand-navy">Analyse Comptable</span>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-primary text-xl"><i class="fas fa-video"></i></div>
-                            <span class="font-semibold font-heading">Expert Vidéo</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="why-us" class="py-24 bg-surface relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
-                <h2 class="text-4xl font-heading font-bold mb-4">Pourquoi nous choisir ?</h2>
-                <p class="text-gray-600 text-lg">Une méthodologie axée sur les résultats et la croissance de votre entreprise.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="glass-card p-8 rounded-2xl reveal">
-                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="text-xl font-bold font-heading mb-3">Expertise digitale réelle</h3>
-                    <p class="text-gray-600">Des stratégies éprouvées sur le terrain, adaptées aux algorithmes actuels.</p>
-                </div>
-                <div class="glass-card p-8 rounded-2xl reveal delay-100">
-                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="text-xl font-bold font-heading mb-3">Expérience entrepreneuriale</h3>
-                    <p class="text-gray-600">Une vision business et comptable pour assurer la rentabilité de vos actions.</p>
-                </div>
-                <div class="glass-card p-8 rounded-2xl reveal delay-200">
-                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="text-xl font-bold font-heading mb-3">Services professionnels</h3>
-                    <p class="text-gray-600">Des livrables de haute qualité, respectant les standards premium.</p>
-                </div>
-                <div class="glass-card p-8 rounded-2xl reveal">
-                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="text-xl font-bold font-heading mb-3">Résultats orientés business</h3>
-                    <p class="text-gray-600">Chaque action est mesurée par son impact sur votre chiffre d'affaires.</p>
-                </div>
-                <div class="glass-card p-8 rounded-2xl reveal delay-100 md:col-span-2 lg:col-span-1 lg:col-start-2">
-                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="text-xl font-bold font-heading mb-3">Accompagnement sérieux</h3>
-                    <p class="text-gray-600">Un suivi personnalisé et une réactivité à toute épreuve pour vos projets.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="services" class="py-24 bg-dark text-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl font-heading font-bold mb-4">Nos Pôles d'Excellence</h2>
-                <p class="text-gray-400 text-lg">Sélectionnez le domaine dans lequel vous souhaitez exploser vos résultats.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-2 gap-10">
-                <!-- Marketing Digital Block -->
-                <div class="bg-white/5 border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition duration-300 reveal group">
-                    <i class="fas fa-bullseye text-5xl text-primary mb-6 group-hover:scale-110 transition"></i>
-                    <h3 class="text-3xl font-heading font-bold mb-4">Marketing Digital</h3>
-                    <p class="text-gray-400 mb-8 leading-relaxed">Produits digitaux, tunnels de vente, et stratégies d'acquisition conçues pour transformer vos prospects en clients fidèles.</p>
-                    <button onclick="openServices('marketing')" class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-blue-600 transition flex items-center justify-center gap-3 track-click" data-label="Bouton: Accéder Marketing">
-                        Accéder au marketing digital <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-
-                <!-- Montage Vidéo Block -->
-                <div class="bg-white/5 border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition duration-300 reveal delay-100 group">
-                    <i class="fas fa-film text-5xl text-primary mb-6 group-hover:scale-110 transition"></i>
-                    <h3 class="text-3xl font-heading font-bold mb-4">Montage Vidéo</h3>
-                    <p class="text-gray-400 mb-8 leading-relaxed">Formats courts viraux (TikTok, Reels, Shorts) montés dynamiquement pour capter l'attention et maximiser la rétention.</p>
-                    <button onclick="openServices('video')" class="w-full bg-white text-dark py-4 rounded-xl font-bold hover:bg-gray-200 transition flex items-center justify-center gap-3 track-click" data-label="Bouton: Accéder Vidéo">
-                        Accéder au montage vidéo <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl font-heading font-bold mb-4">Ils nous font confiance</h2>
-                <div class="flex justify-center gap-1 text-yellow-400 text-2xl">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-            </div>
-
-            <div class="slider-container max-w-4xl mx-auto reveal">
-                <div class="slider-track" id="testimonial-track">
-                    <div class="slide">
-                        <div class="text-center px-4 md:px-12">
-                            <p class="text-xl md:text-2xl text-gray-700 italic font-heading mb-8">"L'expertise de Jonathan a littéralement doublé mon taux de conversion. Les stratégies marketing mises en place sont redoutables et d'une précision chirurgicale."</p>
-                            <h4 class="font-bold text-dark text-lg">Marc D.</h4>
-                            <p class="text-gray-500">Entrepreneur E-commerce</p>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <div class="text-center px-4 md:px-12">
-                            <p class="text-xl md:text-2xl text-gray-700 italic font-heading mb-8">"Le service de montage vidéo est incroyable. Mes Reels font maintenant des milliers de vues grâce au dynamisme et aux sous-titres parfaitement intégrés. Je recommande à 100%."</p>
-                            <h4 class="font-bold text-dark text-lg">Sophie L.</h4>
-                            <p class="text-gray-500">Créatrice de Contenu</p>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <div class="text-center px-4 md:px-12">
-                            <p class="text-xl md:text-2xl text-gray-700 italic font-heading mb-8">"Un accompagnement sérieux et professionnel. KIYOJO ACADÉMIA comprend vraiment les enjeux business. Mon chiffre d'affaires a décollé en 2 mois."</p>
-                            <h4 class="font-bold text-dark text-lg">Thomas B.</h4>
-                            <p class="text-gray-500">Coach Sportif</p>
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-brand-blue"><i class="fa-solid fa-video"></i></span>
+                            <span class="font-bold text-sm text-brand-navy">Montage Court Format</span>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-center gap-4 mt-8">
-                    <button onclick="moveSlider(-1)" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition"><i class="fas fa-chevron-left"></i></button>
-                    <button onclick="moveSlider(1)" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- SECTION : POURQUOI NOUS CHOISIR -->
+        <section id="avantages" class="py-24 bg-brand-lightBg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12 reveal">
+                <div class="space-y-4">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-brand-blue">Pourquoi nous faire confiance ?</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-navy">Notre engagement : des résultats réels</h2>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="faq" class="py-24 bg-surface">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl font-heading font-bold mb-4">Questions Fréquentes</h2>
-                <p class="text-gray-600">Tout ce que vous devez savoir avant de passer à l'action.</p>
-            </div>
-
-            <div class="space-y-4 reveal delay-100">
-                <div class="glass-card rounded-xl faq-item">
-                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
-                        Comment fonctionne KIYOJO ACADÉMIA ?
-                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
-                    </button>
-                    <div class="faq-answer px-6 pb-0 text-gray-600">
-                        <div class="pb-5">Nous analysons votre besoin, établissons une stratégie sur-mesure (que ce soit en marketing digital ou en montage vidéo), et nous implémentons les solutions pour générer des résultats tangibles pour votre business.</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    <!-- Carte 1 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col justify-between hover:border-brand-blue transition-all duration-300">
+                        <div class="text-brand-blue text-4xl mb-4"><i class="fa-solid fa-laptop-code"></i></div>
+                        <div>
+                            <h4 class="font-bold text-md text-brand-navy mb-2 flex items-center justify-center gap-2">✔️ Expertise digitale réelle</h4>
+                            <p class="text-xs text-slate-400">Maîtrise complète des outils publicitaires, d'acquisition de trafic et de persuasion.</p>
+                        </div>
+                    </div>
+                    <!-- Carte 2 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col justify-between hover:border-brand-blue transition-all duration-300">
+                        <div class="text-brand-blue text-4xl mb-4"><i class="fa-solid fa-lightbulb"></i></div>
+                        <div>
+                            <h4 class="font-bold text-md text-brand-navy mb-2 flex items-center justify-center gap-2">✔️ Expérience entrepreneuriale</h4>
+                            <p class="text-xs text-slate-400">Une vision pragmatique de chef d'entreprise axée sur l'investissement intelligent.</p>
+                        </div>
+                    </div>
+                    <!-- Carte 3 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col justify-between hover:border-brand-blue transition-all duration-300">
+                        <div class="text-brand-blue text-4xl mb-4"><i class="fa-solid fa-briefcase"></i></div>
+                        <div>
+                            <h4 class="font-bold text-md text-brand-navy mb-2 flex items-center justify-center gap-2">✔️ Services professionnels</h4>
+                            <p class="text-xs text-slate-400">Des livrables à l'heure, soignés et construits selon des processus rigoureux.</p>
+                        </div>
+                    </div>
+                    <!-- Carte 4 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col justify-between hover:border-brand-blue transition-all duration-300">
+                        <div class="text-brand-blue text-4xl mb-4"><i class="fa-solid fa-chart-simple"></i></div>
+                        <div>
+                            <h4 class="font-bold text-md text-brand-navy mb-2 flex items-center justify-center gap-2">✔️ Résultats business</h4>
+                            <p class="text-xs text-slate-400">Aucune "vanity metrics". Nous nous concentrons uniquement sur vos prospects et vos ventes.</p>
+                        </div>
+                    </div>
+                    <!-- Carte 5 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col justify-between hover:border-brand-blue transition-all duration-300">
+                        <div class="text-brand-blue text-4xl mb-4"><i class="fa-solid fa-handshake"></i></div>
+                        <div>
+                            <h4 class="font-bold text-md text-brand-navy mb-2 flex items-center justify-center gap-2">✔️ Accompagnement sérieux</h4>
+                            <p class="text-xs text-slate-400">Un suivi transparent, honnête et disponible à chaque étape clé du processus.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="glass-card rounded-xl faq-item">
-                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
-                        Comment acheter un service ?
-                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
-                    </button>
-                    <div class="faq-answer px-6 pb-0 text-gray-600">
-                        <div class="pb-5">Rendez-vous dans la section "Services" ci-dessus, choisissez la catégorie, et cliquez sur "Voir le produit" ou contactez-nous directement via WhatsApp pour un devis personnalisé.</div>
+            </div>
+        </section>
+
+        <!-- SECTION : PORTAILS DE SERVICES -->
+        <section id="portails" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12 reveal">
+                <div class="space-y-4">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-brand-blue">Portails exclusifs</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-navy">Choisissez votre levier de croissance</h2>
+                    <p class="text-slate-500 max-w-xl mx-auto">Chaque portail correspond à une expertise clé de KIYOJO ACADÉMIA pour multiplier vos résultats.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Portail Marketing -->
+                    <div class="bg-brand-lightBg p-8 rounded-3xl border border-slate-100 shadow-xl hover:border-brand-blue hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between text-left group">
+                        <div>
+                            <div class="w-16 h-16 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue text-2xl mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <h3 class="text-2xl font-extrabold text-brand-navy mb-3">Marketing Digital</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                                Produits, e-books et guides d'experts conçus pour scaler vos processus de vente automatique et dominer votre secteur d'activité.
+                            </p>
+                        </div>
+                        <button onclick="openPortalView('marketing')" class="w-full py-4 bg-brand-blue text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-darkBlue transition-colors shadow-lg shadow-brand-blue/10">
+                            Accéder au marketing digital <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Portail Montage Vidéo -->
+                    <div class="bg-brand-lightBg p-8 rounded-3xl border border-slate-100 shadow-xl hover:border-brand-blue hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between text-left group">
+                        <div>
+                            <div class="w-16 h-16 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue text-2xl mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <h3 class="text-2xl font-extrabold text-brand-navy mb-3">Montage Vidéo</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                                Production de vidéos courtes hautement dynamiques (Reels, TikTok, Shorts) taillées sur-mesure pour capter l'algorithme et retenir vos prospects.
+                            </p>
+                        </div>
+                        <button onclick="openPortalView('video')" class="w-full py-4 bg-brand-navy text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-black transition-colors shadow-lg shadow-brand-navy/10">
+                            Accéder au montage vidéo <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="glass-card rounded-xl faq-item">
-                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
-                        Est-ce fiable ?
-                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
-                    </button>
-                    <div class="faq-answer px-6 pb-0 text-gray-600">
-                        <div class="pb-5">Absolument. Jonathan Kiyojo met en jeu sa réputation et son expertise d'entrepreneur et comptable. Nos témoignages clients et nos résultats transparents parlent d'eux-mêmes.</div>
+            </div>
+        </section>
+
+        <!-- SECTION : TÉMOIGNAGES (INFINITE CAROUSEL) -->
+        <section id="testimonials" class="py-24 bg-brand-lightBg overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
+                <div class="space-y-4">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-brand-blue">Avis Clients</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-navy">Ils nous font confiance</h2>
+                </div>
+
+                <div class="w-full relative mt-10">
+                    <div class="slider-track gap-6">
+                        <!-- Card 1 -->
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Le travail de montage sur nos formats courts a permis de multiplier nos abonnés par 3 en 30 jours seulement !"</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Amadou D.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Créateur Business</span>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Une rigueur exemplaire. Les conseils marketing m'ont donné les clés de la vente sur mes e-books de business."</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Esther K.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Entrepreneuse</span>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Jonathan comprend directement les enjeux comptables et d'acquisition client. Un prestataire d'exception."</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Moussa Z.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Consultant Finance</span>
+                            </div>
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Des vidéos rythmées, professionnelles et impactantes. Notre taux de conversion publicitaire a bondi de 45% !"</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Cynthia L.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Marque e-commerce</span>
+                            </div>
+                        </div>
+                        <!-- Card 5 -->
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"C'est un réel plaisir d'échanger avec KIYOJO ACADÉMIA. Pas de jargon, des chiffres précis, et un service au top."</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Jean-Marc B.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Créateur de Contenu</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Duplication pour effet de boucle fluide -->
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Le travail de montage sur nos formats courts a permis de multiplier nos abonnés par 3 en 30 jours seulement !"</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Amadou D.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Créateur Business</span>
+                            </div>
+                        </div>
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Une rigueur exemplaire. Les conseils marketing m'ont donné les clés de la vente sur mes e-books de business."</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Esther K.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Entrepreneuse</span>
+                            </div>
+                        </div>
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Jonathan comprend directement les enjeux comptables et d'acquisition client. Un prestataire d'exception."</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Moussa Z.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Consultant Finance</span>
+                            </div>
+                        </div>
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"Des vidéos rythmées, professionnelles et impactantes. Notre taux de conversion publicitaire a bondi de 45% !"</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Cynthia L.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Marque e-commerce</span>
+                            </div>
+                        </div>
+                        <div class="review-card bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 w-[350px] flex-shrink-0 text-left flex flex-col justify-between">
+                            <p class="text-slate-500 italic mb-6">"C'est un réel plaisir d'échanger avec KIYOJO ACADÉMIA. Pas de jargon, des chiffres précis, et un service au top."</p>
+                            <div>
+                                <div class="flex text-amber-400 gap-1 mb-2">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                                <h5 class="font-bold text-brand-navy text-sm">Jean-Marc B.</h5>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400">Créateur de Contenu</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="glass-card rounded-xl faq-item">
-                    <button class="w-full px-6 py-5 text-left flex justify-between items-center font-semibold text-lg text-dark focus:outline-none" onclick="toggleFaq(this)">
-                        Combien de temps pour les résultats ?
-                        <i class="fas fa-chevron-down text-primary transition-transform duration-300 faq-icon"></i>
-                    </button>
-                    <div class="faq-answer px-6 pb-0 text-gray-600">
-                        <div class="pb-5">Pour le montage vidéo, l'impact sur l'engagement est immédiat dès la publication. Pour les stratégies marketing, les premiers résultats de conversion sont généralement observables sous 2 à 4 semaines.</div>
+            </div>
+        </section>
+
+        <!-- SECTION : FAQ ACCORDÉONS -->
+        <section id="faq" class="py-24 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 reveal">
+                <div class="text-center space-y-4">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-brand-blue">Questions fréquentes</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-navy">Des réponses à vos doutes</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- FAQ 1 -->
+                    <div class="border border-slate-150 rounded-2xl overflow-hidden transition-colors duration-300 bg-brand-lightBg/50">
+                        <button onclick="toggleFaq(1)" class="w-full px-6 py-5 flex justify-between items-center text-left font-bold text-brand-navy hover:text-brand-blue transition-colors">
+                            <span>Comment fonctionne KIYOJO ACADÉMIA ?</span>
+                            <i id="faq-icon-1" class="fa-solid fa-plus text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="faq-content-1" class="hidden px-6 pb-5 text-sm text-slate-500 leading-relaxed border-t border-slate-100/60 pt-4">
+                            Nous fonctionnons de manière agile. Vous explorez nos portails de services, vous déterminez vos besoins (Marketing ou Montage Vidéo de croissance) et vous lancez la discussion avec notre équipe via WhatsApp pour personnaliser et valider votre livraison de service.
+                        </div>
+                    </div>
+                    <!-- FAQ 2 -->
+                    <div class="border border-slate-150 rounded-2xl overflow-hidden transition-colors duration-300 bg-brand-lightBg/50">
+                        <button onclick="toggleFaq(2)" class="w-full px-6 py-5 flex justify-between items-center text-left font-bold text-brand-navy hover:text-brand-blue transition-colors">
+                            <span>Comment acheter un service ?</span>
+                            <i id="faq-icon-2" class="fa-solid fa-plus text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="faq-content-2" class="hidden px-6 pb-5 text-sm text-slate-500 leading-relaxed border-t border-slate-100/60 pt-4">
+                            Pour le marketing, vous cliquez sur "Voir le produit" pour accéder à l'offre. Pour le montage vidéo, chaque offre dispose d'un bouton direct WhatsApp pour dialoguer en 1 clic et démarrer votre collaboration sur-mesure.
+                        </div>
+                    </div>
+                    <!-- FAQ 3 -->
+                    <div class="border border-slate-150 rounded-2xl overflow-hidden transition-colors duration-300 bg-brand-lightBg/50">
+                        <button onclick="toggleFaq(3)" class="w-full px-6 py-5 flex justify-between items-center text-left font-bold text-brand-navy hover:text-brand-blue transition-colors">
+                            <span>Est-ce fiable ?</span>
+                            <i id="faq-icon-3" class="fa-solid fa-plus text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="faq-content-3" class="hidden px-6 pb-5 text-sm text-slate-500 leading-relaxed border-t border-slate-100/60 pt-4">
+                            Absolument. Forts d'une base de plus de 150 projets menés à bien et de clients satisfaits, nous garantissons un traitement professionnel de vos demandes. Les feedbacks et nos preuves de résultats en sont le meilleur témoignage.
+                        </div>
+                    </div>
+                    <!-- FAQ 4 -->
+                    <div class="border border-slate-150 rounded-2xl overflow-hidden transition-colors duration-300 bg-brand-lightBg/50">
+                        <button onclick="toggleFaq(4)" class="w-full px-6 py-5 flex justify-between items-center text-left font-bold text-brand-navy hover:text-brand-blue transition-colors">
+                            <span>Combien de temps pour les résultats ?</span>
+                            <i id="faq-icon-4" class="fa-solid fa-plus text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="faq-content-4" class="hidden px-6 pb-5 text-sm text-slate-500 leading-relaxed border-t border-slate-100/60 pt-4">
+                            Pour le montage vidéo, l'optimisation des Reels ou TikTok montre de premiers effets d'engagement organique en quelques jours. Pour des processus de conversion automatisés, les résultats se consolident dans les premières semaines après déploiement.
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="contact" class="py-24 bg-primary text-white relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 reveal">
-            <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">Prêt à dominer votre marché ?</h2>
-            <p class="text-xl text-blue-100 mb-10 leading-relaxed">
-                Ne laissez pas vos concurrents prendre l'avance. Contactez-nous dès aujourd'hui pour transformer votre présence digitale en une véritable machine à cash.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-6">
-                <a href="https://wa.me/243827445800" target="_blank" class="bg-green-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-green-400 transition flex items-center justify-center gap-3 shadow-lg track-click" data-label="CTA: WhatsApp">
-                    <i class="fab fa-whatsapp text-2xl"></i> WhatsApp Direct
-                </a>
-                <a href="#services" class="bg-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition flex items-center justify-center gap-3 shadow-lg track-click" data-label="CTA: Acheter maintenant">
-                    <i class="fas fa-shopping-cart"></i> Acheter maintenant
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-dark text-gray-400 py-12 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
-            <div>
-                <a href="#" class="flex items-center gap-3 text-2xl font-heading font-bold text-white tracking-wide mb-4 inline-flex">
-                    <img src="logo.jpg" alt="Logo" class="w-10 h-10 rounded-full object-cover border-2 border-primary/30" onerror="this.style.display='none'">
-                    <span>KIYOJO<span class="text-primary">.</span></span>
-                </a>
-                <p class="text-sm mt-4">Transformez votre vision en systèmes marketing rentables. Expert en montage vidéo court format.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Liens rapides</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#about" class="hover:text-white transition">Qui sommes-nous</a></li>
-                    <li><a href="#services" class="hover:text-white transition">Services</a></li>
-                    <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
-                    <li><a href="#" class="hover:text-white transition">Mentions légales</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Suivez-nous</h4>
-                <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition track-click" data-label="Social: Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition track-click" data-label="Social: LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition track-click" data-label="Social: YouTube"><i class="fab fa-youtube"></i></a>
+        <!-- SECTION : CONVERSION ULTIME (LANDING CTA) -->
+        <section class="py-24 bg-gradient-to-r from-brand-navy to-brand-black text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.1),transparent)] pointer-events-none"></div>
+            <div class="max-w-4xl mx-auto text-center px-4 space-y-8 relative z-10">
+                <span class="px-4 py-1.5 rounded-full bg-brand-blue/20 border border-brand-blue/30 text-brand-blue font-bold text-xs uppercase tracking-wider">Passez à l'action</span>
+                <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-serif">Prêt à scaler vos résultats en ligne ?</h2>
+                <p class="text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                    Ne laissez pas vos concurrents prendre toute l'audience. Contactez Jonathan Kiyojo dès aujourd'hui pour concevoir vos futurs entonnoirs et vidéos ultra-persuasives.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+                    <a href="https://wa.me/243827445800?text=Bonjour%20Jonathan,%20j'aimerais%20en%20savoir%20plus%20sur%20vos%20services%20d'agence." target="_blank" onclick="trackAction('CTA Final - WhatsApp')" class="px-8 py-4 bg-brand-blue text-white rounded-xl font-bold hover:bg-brand-darkBlue transform hover:-translate-y-1 transition duration-300 shadow-xl shadow-brand-blue/30 flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Acheter / Discuter WhatsApp
+                    </a>
+                    <a href="mailto:joe489581@gmail.com" onclick="trackAction('CTA Final - Email')" class="px-8 py-4 bg-zinc-900 text-white border border-zinc-800 rounded-xl font-semibold hover:bg-zinc-800 transition duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-envelope"></i> Contact par Mail Direct
+                    </a>
                 </div>
             </div>
-        </div>
-        <div class="text-center mt-12 text-sm text-gray-600 cursor-pointer hover:text-white transition-colors" id="copyright-trigger">
-            &copy; 2026 KIYOJO ACADÉMIA. Tous droits réservés.
-        </div>
-    </footer>
+        </section>
 
-    <div id="data-modal" class="modal-overlay">
-        <div class="modal-content relative flex flex-col h-full md:h-auto max-h-[90vh]">
-            <div class="sticky top-0 bg-white p-6 border-b border-gray-100 flex justify-between items-center z-10 rounded-t-xl">
-                <div>
-                    <h2 id="modal-title" class="text-2xl font-heading font-bold text-dark">Chargement...</h2>
-                    <p class="text-gray-500 text-sm mt-1">Sélectionnez l'offre qui vous correspond.</p>
+    </main>
+
+    <!-- ==================== VUE INTERNE : PORTAILS DE SERVICES (SPA) ==================== -->
+    <main id="view-items" class="hidden min-h-screen pt-32 pb-24 bg-brand-lightBg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header du portail interne -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-8 border-b border-slate-200 mb-12 gap-4">
+                <div class="flex flex-col space-y-2">
+                    <button onclick="goHome()" class="w-fit text-xs text-brand-blue hover:underline font-bold flex items-center gap-2 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-arrow-left"></i> Retour à l'accueil
+                    </button>
+                    <h2 id="portal-title" class="text-3xl sm:text-5xl font-extrabold text-brand-navy">Titre Portail Dynamique</h2>
+                    <p id="portal-subtitle" class="text-slate-400 text-sm">Description thématique du portail.</p>
                 </div>
-                <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-red-100 hover:text-red-500 transition">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div id="modal-loader" class="p-20 text-center text-primary">
-                <i class="fas fa-circle-notch fa-spin text-5xl"></i>
-                <p class="mt-4 font-medium">Récupération des données en temps réel...</p>
+                
+                <!-- Filtre de recherche interne -->
+                <div class="relative w-full sm:w-72">
+                    <input type="text" id="service-search" placeholder="Rechercher une offre..." class="w-full bg-white border border-slate-200 focus:border-brand-blue text-sm text-brand-navy px-4 py-3 rounded-xl outline-none transition-colors" oninput="filterServices()">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                </div>
             </div>
 
-            <div id="modal-data-container" class="p-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6 hidden overflow-y-auto">
+            <!-- Loader dynamique interne -->
+            <div id="portal-loader" class="text-center py-24 space-y-4">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-brand-blue"></i>
+                <p id="portal-loader-text" class="text-slate-400 text-sm font-semibold tracking-wide">Chargement des données en cours...</p>
+            </div>
+
+            <!-- Grille d'injection des produits / services -->
+            <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Rempli dynamiquement -->
             </div>
         </div>
-    </div>
+    </main>
 
-    <div id="admin-dashboard" class="fixed inset-0 bg-dark z-[9999] hidden overflow-y-auto text-white p-6">
-        <div class="max-w-5xl mx-auto">
-            <div class="flex justify-between items-center mb-10 pb-6 border-b border-gray-800">
-                <h2 class="text-3xl font-heading font-bold flex items-center gap-3"><i class="fas fa-lock text-primary mr-3"></i>Admin Center</h2>
-                <button onclick="closeAdmin()" class="bg-red-500/20 text-red-400 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition">Fermer</button>
-            </div>
-            
-            <div class="grid md:grid-cols-4 gap-6 mb-10">
-                <div class="bg-gray-800 p-6 rounded-xl">
-                    <p class="text-gray-400 text-sm mb-2">Visiteurs Totaux</p>
-                    <p class="text-4xl font-bold text-white" id="stat-views">0</p>
+    <!-- TOAST NOTIFICATIONS (NO SYSTEM ALERTS) -->
+    <div id="toast-container" class="fixed bottom-6 left-6 z-[9999] flex flex-col gap-2 max-w-sm w-full"></div>
+
+    <!-- PIED DE PAGE ET LIENS -->
+    <footer class="bg-brand-navy border-t border-slate-900 py-16 text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Col 1 -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <img src="logo.jpg" alt="KA" class="w-10 h-10 object-cover rounded-full border border-brand-blue/30" onerror="this.src='https://placehold.co/100x100/2563eb/ffffff?text=KA';">
+                    <span class="text-xl font-bold text-white">KIYOJO <span class="text-brand-blue">ACADÉMIA</span></span>
                 </div>
-                <div class="bg-gray-800 p-6 rounded-xl">
-                    <p class="text-gray-400 text-sm mb-2">Clics sur CTA</p>
-                    <p class="text-4xl font-bold text-primary" id="stat-clicks">0</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-xl">
-                    <p class="text-gray-400 text-sm mb-2">Produits Vus</p>
-                    <p class="text-4xl font-bold text-green-400" id="stat-products">0</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-xl">
-                    <p class="text-gray-400 text-sm mb-2">Taux d'Interaction</p>
-                    <p class="text-4xl font-bold text-yellow-400" id="stat-rate">0%</p>
+                <p class="text-sm leading-relaxed text-slate-400">
+                    Propulsez votre business et automatisez vos processus d'acquisition de prospects avec nos services de marketing et vidéos optimisées.
+                </p>
+                <div class="flex gap-4 text-white text-lg pt-2">
+                    <a href="https://wa.me/243827445800" target="_blank" class="hover:text-brand-blue transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="mailto:joe489581@gmail.com" class="hover:text-brand-blue transition-colors"><i class="fa-solid fa-envelope"></i></a>
                 </div>
             </div>
 
-            <div class="bg-gray-800 p-6 rounded-xl">
-                <h3 class="text-xl font-bold mb-6 border-b border-gray-700 pb-4">Journal d'Activité Récent (Local)</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-400">
-                        <thead class="text-xs text-gray-500 uppercase bg-gray-900">
-                            <tr><th class="px-4 py-3">Date/Heure</th><th class="px-4 py-3">Action</th><th class="px-4 py-3">Détail</th></tr>
-                        </thead>
-                        <tbody id="admin-log-table">
-                            <!-- Rempli dynamiquement -->
-                        </tbody>
-                    </table>
+            <!-- Col 2 -->
+            <div class="space-y-4">
+                <h4 class="text-white font-bold tracking-wider uppercase text-sm">Informations</h4>
+                <ul class="space-y-3 text-sm text-slate-400">
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-brand-blue"></i> joe489581@gmail.com</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-brand-blue"></i> +243 827 445 800</li>
+                    <li class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-green-400"></i> WhatsApp direct</li>
+                </ul>
+            </div>
+
+            <!-- Col 3 -->
+            <div class="space-y-4">
+                <h4 class="text-white font-bold tracking-wider uppercase text-sm">Cabinet Privé</h4>
+                <p class="text-xs leading-relaxed text-slate-500">
+                    Cabinet spécialisé en accompagnement des web-entrepreneurs, créateurs et formateurs indépendants.
+                </p>
+                <!-- Bouton invisible / discret d'administration -->
+                <button onclick="openAdminModal()" class="text-[10px] text-slate-800 hover:text-slate-500 underline uppercase tracking-widest block pt-4">
+                    Espace Admin
+                </button>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-900 text-center text-xs text-slate-500">
+            &copy; 2026 KIYOJO ACADÉMIA. Tous droits réservés. | Fondé par Jonathan Kiyojo
+        </div>
+    </footer>
+
+    <!-- BOUTON WHATSAPP FLOTTANT GLOBAL -->
+    <a href="https://wa.me/243827445800?text=Bonjour%20Jonathan,%20je%20suis%20sur%20votre%20site%20KIYOJO%20ACADÉMIA%20et%20j'aimerais%20des%20conseils." target="_blank" onclick="trackAction('WhatsApp Flottant - Clic')" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center text-2xl shadow-xl hover:scale-115 transform transition duration-300 z-30 animate-bounce" aria-label="WhatsApp direct">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- MODAL DU TABLEAU DE BORD ADMIN SECRET -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-brand-navy/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-brand-navy transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <!-- Étape 1 : Connexion par mot de passe -->
+            <div id="admin-login-step" class="space-y-6 py-4">
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue text-2xl mx-auto mb-3">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy">Connexion sécurisée</h3>
+                    <p class="text-xs text-slate-400">Entrez votre clé d'administration KIYOJO ACADÉMIA</p>
+                </div>
+                <div class="space-y-3">
+                    <input type="password" id="admin-pass" placeholder="Clé d'administration (ex: kiyojo2026)" class="w-full bg-slate-50 border border-slate-200 focus:border-brand-blue px-4 py-3 rounded-xl outline-none text-sm text-center">
+                    <button onclick="submitAdminLogin()" class="w-full py-3.5 bg-brand-blue text-white rounded-xl font-bold text-sm hover:bg-brand-darkBlue transition-colors">
+                        Déverrouiller le Tableau de Bord
+                    </button>
+                </div>
+            </div>
+
+            <!-- Étape 2 : Tableau de bord réel (localStorage Tracking) -->
+            <div id="admin-dashboard-step" class="hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <h3 class="text-xl font-extrabold text-brand-navy">Tableau de Bord Intégré</h3>
+                    <p class="text-xs text-slate-400">Suivi et comportement d'audience locale</p>
+                </div>
+
+                <!-- Grille de stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                        <span class="text-xs text-slate-400 block uppercase font-bold tracking-wider">Visiteurs (sessions)</span>
+                        <span class="text-3xl font-extrabold text-brand-blue mt-1 block" id="admin-stat-visitors">0</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                        <span class="text-xs text-slate-400 block uppercase font-bold tracking-wider">Total Clics CTA</span>
+                        <span class="text-3xl font-extrabold text-brand-navy mt-1 block" id="admin-stat-clics">0</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center col-span-2 sm:col-span-1">
+                        <span class="text-xs text-slate-400 block uppercase font-bold tracking-wider">Taux de Conversion</span>
+                        <span class="text-3xl font-extrabold text-green-500 mt-1 block" id="admin-stat-conv">0%</span>
+                    </div>
+                </div>
+
+                <!-- Liste des derniers clics de tracking -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-sm text-brand-navy">Flux d'activités (Dernières actions)</h4>
+                    <div class="bg-slate-50 rounded-xl border border-slate-150 p-3 max-h-48 overflow-y-auto space-y-2 text-xs" id="admin-logs-flow">
+                        <!-- Log lines injected here -->
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center pt-4 border-t border-slate-100 text-xs">
+                    <button onclick="resetTrackingData()" class="text-red-500 hover:underline">Réinitialiser les données locales</button>
+                    <span class="text-slate-400">KIYOJO ACADÉMIA &copy; 2026</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT JAVASCRIPT -->
+    <!-- LOGIQUE JAVASCRIPT ULTRA-PREMIUM -->
     <script>
-        const URL_CSV_MARKETING = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=0&single=true&output=csv";
-        const URL_CSV_VIDEO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=325166811&single=true&output=csv";
-        const WEB_APP_URL = "TON_URL_WEB_APP_ICI"; // Remplace ici par ton URL de script de déploiement Google Sheets si nécessaire
+        // URLs Google Sheets directes (CSV de sortie public)
+        const MARKETING_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=0&single=true&output=csv";
+        const VIDEO_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdi5Y7NVTJLxYbzV8tNIvnPtTiXDwjYEztdbuna6r-FsdvaMtajI01mKTtZXjjkz89Imt5JMng6X_D/pub?gid=325166811&single=true&output=csv";
+        
+        // Numéro de WhatsApp officiel de l'agence
+        const OFFICIAL_PHONE = "243827445800";
 
-        // Système Premium Toast Notification (remplace alert())
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-xl z-[10000] text-white font-semibold transition-all duration-300 translate-y-10 opacity-0 ${type === 'error' ? 'bg-red-500' : 'bg-primary'}`;
-            toast.innerText = message;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.remove('translate-y-10', 'opacity-0');
-            }, 50);
-            setTimeout(() => {
-                toast.classList.add('translate-y-10', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Système de tracking analytique local et distant
-        const Tracker = {
-            data: JSON.parse(localStorage.getItem('kiyojo_stats')) || { views: 0, clicks: 0, products_viewed: 0, logs: [] },
-            
-            init() {
-                if(!sessionStorage.getItem('visited')) {
-                    this.data.views++;
-                    sessionStorage.setItem('visited', 'true');
-                    this.logAction('Visite', 'Nouvelle session initiée');
-                    this.sendRemoteLog('Visite', 'Accueil', 'Nouvelle session initiée');
-                }
-                
-                document.querySelectorAll('.track-click').forEach(el => {
-                    el.addEventListener('click', (e) => {
-                        this.data.clicks++;
-                        const label = el.getAttribute('data-label') || 'Bouton Inconnu';
-                        Tracker.logAction('Clic CTA', label);
-                        Tracker.sendRemoteLog('Clic', 'Action', label);
-                    });
-                });
-            },
-            
-            logAction(type, detail) {
-                const now = new Date();
-                this.data.logs.unshift({ time: now.toLocaleString(), type, detail });
-                if(this.data.logs.length > 50) this.data.logs.pop();
-                this.save();
-            },
-            
-            trackProductView(productName) {
-                this.data.products_viewed++;
-                this.logAction('Vue Produit', productName);
-                this.sendRemoteLog('Vue Produit', 'Services', productName);
-            },
-            
-            save() {
-                localStorage.setItem('kiyojo_stats', JSON.stringify(this.data));
-            },
-
-            sendRemoteLog(action, page, details) {
-                if (WEB_APP_URL === "TON_URL_WEB_APP_ICI") return; // Skip si l'URL n'est pas configurée
-                fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action, page, details })
-                }).catch(err => console.log('Remote logging failed silently'));
-            }
-        };
-
+        // Chargement initial du loader
         window.addEventListener('load', () => {
-            Tracker.init();
-            
-            const bar = document.getElementById('loader-bar');
-            bar.style.width = '100%';
             setTimeout(() => {
-                const loader = document.getElementById('page-loader');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 500);
-            }, 1000);
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+                const loader = document.getElementById('loader');
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                
+                // Enregistrer l'arrivée d'un visiteur local
+                initVisitorTracking();
+            }, 850);
             
-            checkAdminHash();
-            window.addEventListener('hashchange', checkAdminHash);
+            // Lancer l'initialisation des révélations au défilement
+            initRevealOnScroll();
         });
 
-        const mobileBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileOverlay = document.getElementById('mobile-menu-overlay');
-        const mobileIcon = document.getElementById('mobile-menu-icon');
-        let isMenuOpen = false;
+        /* --- LOGIQUE SPA : NAVIGATION ENTRE VUES --- */
+        let currentPortalData = []; // Conserve les données locales pour les filtres de recherche
 
-        function toggleMobileMenu() {
-            isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                mobileOverlay.classList.remove('hidden');
-                setTimeout(() => mobileOverlay.classList.remove('opacity-0'), 10);
-                mobileMenu.classList.remove('translate-x-full');
-                mobileIcon.classList.remove('fa-bars');
-                mobileIcon.classList.add('fa-times', 'rotate-90');
-                document.body.style.overflow = 'hidden';
+        function openPortalView(type) {
+            const homeView = document.getElementById('view-home');
+            const itemsView = document.getElementById('view-items');
+            const pTitle = document.getElementById('portal-title');
+            const pSubtitle = document.getElementById('portal-subtitle');
+            const grid = document.getElementById('services-grid');
+            const searchInput = document.getElementById('service-search');
+            
+            // Reset de l'input de recherche
+            searchInput.value = "";
+            grid.innerHTML = "";
+            
+            // Transition visuelle
+            homeView.classList.add('hidden');
+            itemsView.classList.remove('hidden');
+            
+            // Remplir les informations contextuelles de titre
+            if (type === 'marketing') {
+                pTitle.innerText = "Marketing Digital";
+                pSubtitle.innerText = "Produits haut de gamme et stratégies sur-mesure d'optimisation de conversions.";
+                document.getElementById('portal-loader-text').innerText = "Chargement des produits digitaux en cours...";
             } else {
-                mobileOverlay.classList.add('opacity-0');
-                mobileMenu.classList.add('translate-x-full');
-                mobileIcon.classList.add('fa-bars');
-                mobileIcon.classList.remove('fa-times', 'rotate-90');
-                document.body.style.overflow = 'auto';
-                setTimeout(() => mobileOverlay.classList.add('hidden'), 300);
+                pTitle.innerText = "Montage Vidéo";
+                pSubtitle.innerText = "Service professionnel de montage de vidéos de croissance et formats courts viraux.";
+                document.getElementById('portal-loader-text').innerText = "Chargement des services de montage vidéo en cours...";
             }
+            
+            // Enregistrement de l'action de tracking
+            trackAction(`Ouverture Portail: ${type}`);
+            
+            // Lancement du chargement de données Google Sheet via PapaParse
+            fetchPortalData(type);
         }
 
-        mobileBtn.addEventListener('click', toggleMobileMenu);
-        mobileOverlay.addEventListener('click', toggleMobileMenu);
+        function goHome() {
+            document.getElementById('view-items').classList.add('hidden');
+            document.getElementById('view-home').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-        document.querySelectorAll('.mobile-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if(isMenuOpen) toggleMobileMenu();
-            });
-        });
-
-        function openServices(type) {
-            const modal = document.getElementById('data-modal');
-            const loader = document.getElementById('modal-loader');
-            const container = document.getElementById('modal-data-container');
-            const title = document.getElementById('modal-title');
+        /* --- CHARGEMENT DÉTAILLÉ DE GOOGLE SHEETS --- */
+        function fetchPortalData(type) {
+            const loader = document.getElementById('portal-loader');
+            const grid = document.getElementById('services-grid');
+            const url = (type === 'marketing') ? MARKETING_SHEET_URL : VIDEO_SHEET_URL;
             
-            modal.classList.add('active');
             loader.classList.remove('hidden');
-            container.classList.add('hidden');
-            container.innerHTML = '';
-            document.body.style.overflow = 'hidden';
-
-            const url = type === 'marketing' ? URL_CSV_MARKETING : URL_CSV_VIDEO;
-            title.innerText = type === 'marketing' ? "Produits Marketing Digital" : "Services Montage Vidéo";
-
+            
             Papa.parse(url, {
                 download: true,
                 header: true,
+                skipEmptyLines: true,
                 complete: function(results) {
-                    renderCards(results.data, type);
                     loader.classList.add('hidden');
-                    container.classList.remove('hidden');
+                    currentPortalData = results.data;
+                    renderPortalItems(type, currentPortalData);
                 },
-                error: function(error) {
-                    loader.innerHTML = `<p class="text-red-500"><i class="fas fa-exclamation-triangle"></i> Erreur de chargement des données. Veuillez réessayer.</p>`;
+                error: function(err) {
+                    loader.classList.add('hidden');
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-red-500">
+                            <i class="fa-solid fa-circle-exclamation text-3xl mb-3"></i>
+                            <p class="font-bold">Erreur de connexion à Google Sheets</p>
+                            <p class="text-xs text-slate-400 mt-1">Veuillez vérifier votre accès réseau ou réessayer dans quelques instants.</p>
+                        </div>
+                    `;
                 }
             });
         }
 
-        function closeModal() {
-            document.getElementById('data-modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        function renderCards(data, type) {
-            const container = document.getElementById('modal-data-container');
-            data.forEach(item => {
-                if(!item.Nom_Produit && !item.Titre_Service) return;
-
-                const name = item.Nom_Produit || item.Titre_Service || 'Service sans nom';
-                const desc = item.Description || 'Aucune description disponible.';
-                const price = item.Prix || 'Sur devis';
-                const link = item.URL || `https://wa.me/243827445800?text=Bonjour, je suis intéressé par : ${encodeURIComponent(name)}`;
-                
-                const btnText = type === 'marketing' ? "Voir le produit" : "Discuter du projet";
-                const btnIcon = type === 'marketing' ? "fa-external-link-alt" : "fa-whatsapp";
-
-                const card = document.createElement('div');
-                card.className = "bg-surface border border-gray-100 p-6 rounded-2xl flex flex-col hover:shadow-lg transition group";
-                card.innerHTML = `
-                    <div class="flex-grow">
-                        <h4 class="text-xl font-heading font-bold text-dark mb-2">${name}</h4>
-                        <p class="text-gray-500 text-sm mb-4 leading-relaxed">${desc}</p>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <div class="text-2xl font-bold text-primary mb-4">${price}</div>
-                        <a href="${link}" target="_blank" onclick="Tracker.trackProductView('${name}')" class="block w-full text-center bg-dark text-white py-3 rounded-lg font-semibold hover:bg-primary transition group-hover:scale-105">
-                            <i class="fas ${btnIcon} mr-2"></i> ${btnText}
-                        </a>
+        /* --- RENDU DES PRODUITS / SERVICES --- */
+        function renderPortalItems(type, items) {
+            const grid = document.getElementById('services-grid');
+            grid.innerHTML = "";
+            
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-400">
+                        <i class="fa-regular fa-folder-open text-3xl mb-2"></i>
+                        <p class="text-sm">Aucune offre ne correspond à cette recherche.</p>
                     </div>
                 `;
-                container.appendChild(card);
+                return;
+            }
+            
+            items.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl border border-slate-100 p-8 shadow-xl hover:border-brand-blue hover:shadow-2xl transition-all duration-300 flex flex-col justify-between";
+                
+                let title, desc, price, buttonHTML;
+                
+                if (type === 'marketing') {
+                    title = item.Nom_Produit || "Produit sans titre";
+                    desc = item.Description || "Description non fournie.";
+                    price = item.Prix || "Sur devis";
+                    const itemUrl = item.URL || "#";
+                    
+                    buttonHTML = `
+                        <a href="${itemUrl}" target="_blank" onclick="trackAction('Voir Produit: ${title}')" class="w-full py-4 bg-brand-blue text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-darkBlue transition-colors shadow-lg shadow-brand-blue/15 text-sm uppercase tracking-wider">
+                            Voir le produit
+                        </a>
+                    `;
+                } else {
+                    title = item.Titre_Service || "Service sans titre";
+                    desc = item.Description || "Description non disponible.";
+                    price = item.Prix || "Sur devis";
+                    
+                    const waMsg = encodeURIComponent(`Bonjour Jonathan, je suis très intéressé par l'offre de montage vidéo : ${title}. J'aimerais en discuter.`);
+                    const waLink = `https://wa.me/${OFFICIAL_PHONE}?text=${waMsg}`;
+                    
+                    buttonHTML = `
+                        <a href="${waLink}" target="_blank" onclick="trackAction('Discuter WhatsApp: ${title}')" class="w-full py-4 bg-green-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-green-600 transition-colors shadow-lg shadow-green-500/15 text-sm uppercase tracking-wider">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Discuter
+                        </a>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="px-3 py-1 bg-brand-blue/5 border border-brand-blue/15 rounded-full text-brand-blue text-[10px] uppercase font-bold tracking-widest">${type}</span>
+                            <span class="text-brand-blue font-extrabold text-xl font-sans">${price}</span>
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-brand-navy tracking-tight leading-snug">${title}</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed pb-8">${desc}</p>
+                    </div>
+                    <div class="mt-auto">
+                        ${buttonHTML}
+                    </div>
+                `;
+                
+                grid.appendChild(card);
             });
         }
 
-        let currentSlide = 0;
-        function moveSlider(direction) {
-            const track = document.getElementById('testimonial-track');
-            const slides = track.children;
-            currentSlide = (currentSlide + direction + slides.length) % slides.length;
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }
-        setInterval(() => moveSlider(1), 5000);
-
-        function toggleFaq(btn) {
-            const item = btn.parentElement;
-            const isActive = item.classList.contains('active');
-            document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
-            if(!isActive) item.classList.add('active');
+        /* --- FILTRE DE RECHERCHE --- */
+        function filterServices() {
+            const query = document.getElementById('service-search').value.toLowerCase();
+            const activeType = document.getElementById('portal-title').innerText.toLowerCase().includes("marketing") ? 'marketing' : 'video';
+            
+            const filtered = currentPortalData.filter(item => {
+                const titleStr = (activeType === 'marketing' ? item.Nom_Produit : item.Titre_Service) || "";
+                const descStr = item.Description || "";
+                return titleStr.toLowerCase().includes(query) || descStr.toLowerCase().includes(query);
+            });
+            
+            renderPortalItems(activeType, filtered);
         }
 
-        function checkAdminHash() {
-            if(window.location.hash === '#admin') {
-                promptAdmin();
-                history.replaceState(null, null, ' ');
+        /* --- MENU COMPORTEMENT MOBILE --- */
+        function toggleMobileMenu(show) {
+            const menu = document.getElementById('mobile-menu');
+            const panel = document.getElementById('mobile-menu-panel');
+            
+            if (show) {
+                menu.classList.remove('invisible');
+                setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+            } else {
+                panel.classList.add('translate-x-full');
+                setTimeout(() => menu.classList.add('invisible'), 300);
             }
         }
 
-        let clickCount = 0;
-        document.getElementById('copyright-trigger').addEventListener('click', () => {
-            clickCount++;
-            if(clickCount >= 3) { clickCount = 0; promptAdmin(); }
-            setTimeout(() => clickCount = 0, 2000);
-        });
-
-        function promptAdmin() {
-            const code = prompt("Accès restreint. Mot de passe de l'administrateur (astuce: 0000) :");
-            if(code === "0000") openAdmin();
-            else if(code) showToast("Code incorrect.", "error");
-        }
-
-        function openAdmin() {
-            document.getElementById('admin-dashboard').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            updateAdminStats();
-        }
-
-        function closeAdmin() {
-            document.getElementById('admin-dashboard').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        function updateAdminStats() {
-            const d = Tracker.data;
-            document.getElementById('stat-views').innerText = d.views;
-            document.getElementById('stat-clicks').innerText = d.clicks;
-            document.getElementById('stat-products').innerText = d.products_viewed;
+        /* --- REVEAL EFFECTS ON SCROLL --- */
+        function initRevealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
             
-            const rate = d.views > 0 ? Math.round((d.clicks / d.views) * 100) : 0;
-            document.getElementById('stat-rate').innerText = `${rate}%`;
+            const checkReveal = () => {
+                const windowHeight = window.innerHeight;
+                reveals.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - 120) {
+                        element.classList.add('active');
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', checkReveal);
+            checkReveal(); // First trigger
+        }
 
-            const tbody = document.getElementById('admin-log-table');
-            tbody.innerHTML = d.logs.map(log => `
-                <tr class="border-b border-gray-800">
-                    <td class="px-4 py-3">${log.time}</td>
-                    <td class="px-4 py-3"><span class="bg-gray-800 px-2 py-1 rounded text-xs text-primary">${log.type}</span></td>
-                    <td class="px-4 py-3">${log.detail}</td>
-                </tr>
-            `).join('');
+        /* --- FAQ ACCORDÉON --- */
+        function toggleFaq(id) {
+            const content = document.getElementById(`faq-content-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.className = "fa-solid fa-minus text-brand-blue transition-transform";
+            } else {
+                content.classList.add('hidden');
+                icon.className = "fa-solid fa-plus text-slate-400 transition-transform";
+            }
+        }
+
+        /* --- ANIME SYSTEM TOAST NOTIFICATIONS --- */
+        function showToast(msg, type = "success") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const icon = type === "success" ? "fa-circle-check text-green-500" : "fa-circle-info text-brand-blue";
+            const border = type === "success" ? "border-green-500/20" : "border-brand-blue/20";
+            
+            toast.className = `flex items-center gap-3 bg-white border ${border} text-brand-navy px-4 py-3 rounded-2xl shadow-xl transition-all duration-300 translate-y-10 opacity-0`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-lg"></i>
+                <span class="text-xs font-semibold tracking-wide">${msg}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 50);
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        /* --- SYSTEME DE TRACKING SECRETE --- */
+        function initVisitorTracking() {
+            let sessionStarted = sessionStorage.getItem('ka_session_started');
+            if (!sessionStarted) {
+                sessionStorage.setItem('ka_session_started', 'true');
+                
+                // Incrémenter les visiteurs uniques locaux
+                let visitors = parseInt(localStorage.getItem('ka_total_visitors') || "0");
+                visitors += 1;
+                localStorage.setItem('ka_total_visitors', visitors.toString());
+                
+                // Enregistrer l'action de bienvenue
+                trackAction("Nouvelle visite", "Système");
+            }
+        }
+
+        function trackAction(actionName, details = "") {
+            // Incrémenter le total des clics
+            let clics = parseInt(localStorage.getItem('ka_total_clics') || "0");
+            clics += 1;
+            localStorage.setItem('ka_total_clics', clics.toString());
+            
+            // Stocker l'historique d'action
+            let logs = JSON.parse(localStorage.getItem('ka_logs') || "[]");
+            logs.unshift({
+                time: new Date().toLocaleTimeString(),
+                action: actionName,
+                details: details
+            });
+            // On conserve les 50 dernières actions uniquement
+            if (logs.length > 50) logs.pop();
+            localStorage.setItem('ka_logs', JSON.stringify(logs));
+        }
+
+        /* --- ESPACE ADMIN CACHE --- */
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.getElementById('admin-login-step').classList.remove('hidden');
+            document.getElementById('admin-dashboard-step').classList.add('hidden');
+            document.getElementById('admin-pass').value = "";
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function submitAdminLogin() {
+            const p = document.getElementById('admin-pass').value;
+            // Mot de passe sécurisé exigé par le cahier des charges : kiyojo2026
+            if (p === "kiyojo2026") {
+                document.getElementById('admin-login-step').classList.add('hidden');
+                document.getElementById('admin-dashboard-step').classList.remove('hidden');
+                
+                // Remplir les données du tableau de bord
+                loadAdminDashboardData();
+                showToast("Accès admin accordé.", "success");
+            } else {
+                showToast("Mot de passe invalide", "error");
+            }
+        }
+
+        function loadAdminDashboardData() {
+            const visitors = localStorage.getItem('ka_total_visitors') || "0";
+            const clics = localStorage.getItem('ka_total_clics') || "0";
+            
+            // Calcul d'un taux de conversion simulé réaliste
+            // (Nombre d'actions d'achats divisé par le nombre de visiteurs)
+            const logs = JSON.parse(localStorage.getItem('ka_logs') || "[]");
+            const conversionActions = logs.filter(l => l.action.includes("Discuter") || l.action.includes("Voir Produit")).length;
+            
+            let conversionRate = 0;
+            if (parseInt(visitors) > 0) {
+                conversionRate = Math.round((conversionActions / parseInt(visitors)) * 100);
+            }
+            
+            document.getElementById('admin-stat-visitors').innerText = visitors;
+            document.getElementById('admin-stat-clics').innerText = clics;
+            document.getElementById('admin-stat-conv').innerText = `${conversionRate}%`;
+            
+            // Injecter le flux d'activité
+            const logContainer = document.getElementById('admin-logs-flow');
+            logContainer.innerHTML = "";
+            
+            if (logs.length === 0) {
+                logContainer.innerHTML = `<p class="text-slate-400 italic text-center">Aucune action enregistrée pour l'instant.</p>`;
+                return;
+            }
+            
+            logs.forEach(log => {
+                const line = document.createElement('div');
+                line.className = "py-1.5 border-b border-slate-100 flex justify-between gap-2";
+                line.innerHTML = `
+                    <span class="text-[10px] text-slate-400 font-bold">${log.time}</span>
+                    <span class="font-semibold text-brand-navy flex-1 text-right">${log.action}</span>
+                `;
+                logContainer.appendChild(line);
+            });
+        }
+
+        function resetTrackingData() {
+            localStorage.setItem('ka_total_visitors', "1");
+            localStorage.setItem('ka_total_clics', "0");
+            localStorage.setItem('ka_logs', "[]");
+            loadAdminDashboardData();
+            showToast("Données de conversion réinitialisées.", "success");
         }
     </script>
 </body>
