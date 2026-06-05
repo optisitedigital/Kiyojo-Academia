@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard Admin - KIYOJO ACADÉMIA Analytics">
+    <title>Admin Dashboard - KIYOJO ACADÉMIA</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #1E90FF;
+            --dark-blue: #0F1729;
+            --light-blue: #3DA5FF;
+            --white: #FFFFFF;
+            --text-light: #E8ECEF;
+            --text-muted: #A0A9B3;
+            --success: #25D366;
+            --warning: #FFA500;
+            --danger: #FF6B6B;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #1E90FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0F1729 0%, #1a2847 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 41, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i { color: var(--accent); }
+
+        .header-info {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .header-info a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-info a:hover {
+            color: var(--accent);
+        }
+
+        /* CONTAINER */
+        .container {
+            margin-top: 80px;
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            animation: slideInUp 0.6s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.2);
+        }
+
+        .stat-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-card-icon.success { color: var(--success); }
+        .stat-card-icon.warning { color: var(--warning); }
+        .stat-card-icon.danger { color: var(--danger); }
+        .stat-card-icon.info { color: var(--accent); }
+
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .stat-trend {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-trend.up { color: var(--success); }
+        .stat-trend.down { color: var(--danger); }
+
+        /* CHARTS */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .chart-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 15px;
+            animation: slideInUp 0.6s ease 0.2s both;
+        }
+
+        .chart-card h3 {
+            margin-bottom: 20px;
+            color: var(--white);
+            font-size: 1.3rem;
+        }
+
+        .chart-card canvas {
+            max-height: 300px;
+        }
+
+        /* ACTIVITY TABLE */
+        .activity-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 15px;
+            animation: slideInUp 0.6s ease 0.4s both;
+            margin-bottom: 50px;
+        }
+
+        .activity-section h3 {
+            margin-bottom: 20px;
+            color: var(--white);
+            font-size: 1.3rem;
+        }
+
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .activity-table th {
+            background: rgba(30, 144, 255, 0.1);
+            padding: 15px;
+            text-align: left;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .activity-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-light);
+        }
+
+        .activity-table tr:hover {
+            background: rgba(30, 144, 255, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: rgba(37, 211, 102, 0.2);
+            color: var(--success);
+        }
+
+        .badge.pending {
+            background: rgba(255, 165, 0, 0.2);
+            color: var(--warning);
+        }
+
+        .badge.error {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 30px 5%;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            margin-top: 60px;
+            background: linear-gradient(180deg, rgba(15, 23, 41, 0.5) 0%, rgba(15, 23, 41, 1) 100%);
+        }
+
+        .footer-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 5%;
+            }
+
+            .container {
+                padding: 20px 5%;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-table {
+                font-size: 0.85rem;
+            }
+
+            .activity-table th, .activity-table td {
+                padding: 10px;
+            }
+
+            .header-info {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* LOADING */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: var(--accent);
+        }
+
+        .loading i {
+            animation: spin 2s linear infinite;
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-line"></i> KIYOJO ADMIN
+        </div>
+        <div class="header-info">
+            <a href="https://wa.me/243827445800" target="_blank">
+                <i class="fab fa-whatsapp"></i> Support
+            </a>
+            <a href="mailto:joe489581@gmail.com">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+            <a href="index.html">
+                <i class="fas fa-home"></i> Retour Site
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>📊 Dashboard Analytics</h1>
+        <p class="subtitle">Statistiques et performances du site KIYOJO ACADÉMIA</p>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-icon info"><i class="fas fa-eye"></i></div>
+                <h3>Vues Totales</h3>
+                <div class="stat-value" id="totalViews">-</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +12% ce mois</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon success"><i class="fas fa-mouse-pointer"></i></div>
+                <h3>Clics Produits</h3>
+                <div class="stat-value" id="totalClicks">-</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +8% ce mois</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon warning"><i class="fas fa-envelope"></i></div>
+                <h3>Messages WhatsApp</h3>
+                <div class="stat-value" id="whatsappMessages">-</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +25% ce mois</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon danger"><i class="fas fa-clock"></i></div>
+                <h3>Temps Moyen</h3>
+                <div class="stat-value">2m 34s</div>
+                <div class="stat-trend down"><i class="fas fa-arrow-down"></i> -3% ce mois</div>
+            </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3>📈 Visites par Jour (7 derniers jours)</h3>
+                <canvas id="visitsChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🎯 Engagement par Section</h3>
+                <canvas id="engagementChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>📱 Traffic par Appareil</h3>
+                <canvas id="deviceChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🌍 Top Pays</h3>
+                <canvas id="countriesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="activity-section">
+            <h3>📋 Activité Récente</h3>
+            <table class="activity-table">
+                <thead>
+                    <tr>
+                        <th>Heure</th>
+                        <th>Action</th>
+                        <th>Utilisateur</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody id="activityTable">
+                    <tr>
+                        <td colspan="4" class="loading"><i class="fas fa-spinner"></i> Chargement...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 KIYOJO ACADÉMIA | 
+            <a href="mailto:joe489581@gmail.com" class="footer-link">joe489581@gmail.com</a> | 
+            <a href="https://wa.me/243827445800" class="footer-link" target="_blank">+243 827 445 800</a>
+        </p>
+    </footer>
+
+    <script>
+        // DONNÉES SIMULÉES (À CONNECTER AVEC UNE API RÉELLE)
+        const mockData = {
+            views: Math.floor(Math.random() * 5000) + 2000,
+            clicks: Math.floor(Math.random() * 500) + 100,
+            whatsapp: Math.floor(Math.random() * 150) + 30,
+            activities: [
+                { time: '14:32', action: 'Consulté Produits', user: 'Utilisateur 1', status: 'success' },
+                { time: '14:15', action: 'Cliqué WhatsApp', user: 'Utilisateur 2', status: 'success' },
+                { time: '13:48', action: 'Visité Services', user: 'Utilisateur 3', status: 'success' },
+                { time: '13:22', action: 'Message Email', user: 'Utilisateur 4', status: 'pending' },
+                { time: '12:55', action: 'Téléchargement', user: 'Utilisateur 5', status: 'error' },
+                { time: '12:30', action: 'Formulaire Envoyé', user: 'Utilisateur 6', status: 'success' },
+                { time: '12:10', action: 'Visite Bio', user: 'Utilisateur 7', status: 'success' },
+                { time: '11:45', action: 'Scroll Produits', user: 'Utilisateur 8', status: 'success' },
+            ]
+        };
+
+        // AFFICHER LES STATS
+        document.getElementById('totalViews').textContent = mockData.views.toLocaleString();
+        document.getElementById('totalClicks').textContent = mockData.clicks.toLocaleString();
+        document.getElementById('whatsappMessages').textContent = mockData.whatsapp.toLocaleString();
+
+        // CHARGER L'ACTIVITÉ
+        function loadActivity() {
+            const tbody = document.getElementById('activityTable');
+            tbody.innerHTML = mockData.activities.map(act => `
+                <tr>
+                    <td>${act.time}</td>
+                    <td>${act.action}</td>
+                    <td>${act.user}</td>
+                    <td><span class="badge ${act.status}">${act.status === 'success' ? '✓ Succès' : act.status === 'pending' ? '⏳ En attente' : '✗ Erreur'}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // CHARTS
+        const chartConfig = {
+            plugins: {
+                legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } }
+            },
+            scales: {
+                y: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } },
+                x: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
+            }
+        };
+
+        // VISITES
+        const visitsCtx = document.getElementById('visitsChart').getContext('2d');
+        new Chart(visitsCtx, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                datasets: [{
+                    label: 'Visites',
+                    data: [320, 480, 420, 580, 490, 720, 650],
+                    borderColor: '#1E90FF',
+                    backgroundColor: 'rgba(30, 144, 255, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: chartConfig
+        });
+
+        // ENGAGEMENT
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(engagementCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Produits', 'Services', 'Bio', 'Contact', 'Autres'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF', '#25D366', '#FFA500']
+                }]
+            },
+            options: { plugins: { legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } } } }
+        });
+
+        // DEVICE
+        const deviceCtx = document.getElementById('deviceChart').getContext('2d');
+        new Chart(deviceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mobile', 'Desktop', 'Tablet'],
+                datasets: [{
+                    label: 'Nombre de visites',
+                    data: [2400, 1800, 600],
+                    backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF']
+                }]
+            },
+            options: chartConfig
+        });
+
+        // PAYS
+        const countriesCtx = document.getElementById('countriesChart').getContext('2d');
+        new Chart(countriesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['RDC', 'Burundi', 'Uganda', 'Kenya', 'Autres'],
+                datasets: [{
+                    label: 'Visites',
+                    data: [3200, 1800, 1200, 800, 1000],
+                    backgroundColor: '#1E90FF'
+                }]
+            },
+            options: chartConfig
+        });
+
+        // CHARGER L'ACTIVITÉ AU DÉMARRAGE
+        loadActivity();
+
+        // SIMULER LA MISE À JOUR EN TEMPS RÉEL
+        setInterval(() => {
+            const randomView = Math.floor(Math.random() * 50);
+            const currentViews = parseInt(document.getElementById('totalViews').textContent.replace(/,/g, ''));
+            document.getElementById('totalViews').textContent = (currentViews + randomView).toLocaleString();
+        }, 5000);
+    </script>
+</body>
+</html>
