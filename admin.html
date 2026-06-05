@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dashboard Admin - KIYOJO ACADÉMIA Analytics">
-    <title>Admin Dashboard - KIYOJO ACADÉMIA</title>
+    <meta name="description" content="Admin - KIYOJO ACADÉMIA Analytics Dashboard">
+    <meta name="theme-color" content="#1E90FF">
+    
+    <title>🔐 Admin - KIYOJO ACADÉMIA</title>
+    <link rel="icon" type="image/png" href="logo.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -18,12 +20,13 @@
             --white: #FFFFFF;
             --text-light: #E8ECEF;
             --text-muted: #A0A9B3;
-            --success: #25D366;
-            --warning: #FFA500;
-            --danger: #FF6B6B;
             --glass-bg: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(255, 255, 255, 0.1);
             --accent: #1E90FF;
+            --accent-glow: rgba(30, 144, 255, 0.3);
+            --success: #25D366;
+            --warning: #FFA500;
+            --danger: #FF6B6B;
         }
 
         * {
@@ -37,70 +40,74 @@
             background: linear-gradient(135deg, #0F1729 0%, #1a2847 100%);
             color: var(--text-light);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 
-        /* LOGIN SCREEN */
-        .login-container {
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 700; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+        /* LOGIN PAGE */
+        #loginPage {
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
-            width: 100%;
+            animation: fadeIn 0.5s ease;
         }
 
-        .login-box {
+        .login-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             padding: 50px;
             border-radius: 20px;
-            text-align: center;
             max-width: 400px;
-            animation: slideInUp 0.8s ease;
-            box-shadow: 0 8px 32px rgba(30, 144, 255, 0.2);
+            width: 100%;
+            animation: slideInUp 0.6s ease;
         }
 
-        .login-box h1 {
-            font-size: 2rem;
+        .login-card h2 {
+            text-align: center;
             margin-bottom: 10px;
+            font-size: 2rem;
             background: linear-gradient(135deg, var(--white) 0%, var(--light-blue) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .login-box p {
+        .login-card p {
+            text-align: center;
             color: var(--text-muted);
             margin-bottom: 30px;
-            font-size: 0.9rem;
         }
 
         .form-group {
             margin-bottom: 20px;
-            text-align: left;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: var(--text-light);
             font-weight: 600;
-            font-size: 0.9rem;
+            color: var(--text-light);
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
             border: 1px solid var(--glass-border);
+            background: rgba(30, 144, 255, 0.05);
             border-radius: 8px;
             color: var(--white);
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
         }
 
@@ -108,10 +115,10 @@
             outline: none;
             border-color: var(--accent);
             background: rgba(30, 144, 255, 0.1);
-            box-shadow: 0 0 15px rgba(30, 144, 255, 0.3);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        .btn-login {
+        .login-btn {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, var(--accent) 0%, var(--light-blue) 100%);
@@ -121,599 +128,709 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1rem;
             margin-top: 10px;
         }
 
-        .btn-login:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
+            box-shadow: 0 10px 30px var(--accent-glow);
         }
 
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .error-msg {
-            color: var(--danger);
-            font-size: 0.85rem;
-            margin-top: 10px;
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid var(--danger);
+            color: #FF9999;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: none;
-            animation: shake 0.5s ease;
-        }
-
-        .error-msg.show {
-            display: block;
+            text-align: center;
         }
 
         /* DASHBOARD */
-        .admin-dashboard {
+        #dashboard {
             display: none;
+            animation: fadeIn 0.5s ease;
         }
 
-        .admin-dashboard.active {
-            display: block;
-        }
-
-        /* HEADER */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 5%;
+        .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 1000;
-            background: rgba(15, 23, 41, 0.95);
-            backdrop-filter: blur(15px);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--white);
-            text-decoration: none;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo i { color: var(--accent); }
-
-        .header-info {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .header-info a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .header-info a:hover {
-            color: var(--accent);
-        }
-
-        /* CONTAINER */
-        .container {
-            margin-top: 80px;
-            padding: 40px 5%;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        h1 {
+        .dashboard-header h1 {
             font-size: 2.5rem;
-            margin-bottom: 10px;
             background: linear-gradient(135deg, var(--white) 0%, var(--light-blue) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .subtitle {
-            color: var(--text-muted);
+        .dashboard-header button {
+            padding: 10px 20px;
+            background: var(--danger);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-header button:hover {
+            background: #FF5252;
+            transform: scale(1.05);
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-bottom: 40px;
         }
 
-        /* STATS GRID */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
-        .stat-card {
+        .stat-box {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             padding: 30px;
             border-radius: 15px;
             transition: all 0.3s ease;
-            animation: slideInUp 0.6s ease;
         }
 
-        .stat-card:hover {
+        .stat-box:hover {
             border-color: var(--accent);
+            box-shadow: 0 10px 35px var(--accent-glow);
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.2);
         }
 
-        .stat-card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .stat-card-icon.success { color: var(--success); }
-        .stat-card-icon.warning { color: var(--warning); }
-        .stat-card-icon.danger { color: var(--danger); }
-        .stat-card-icon.info { color: var(--accent); }
-
-        .stat-card h3 {
+        .stat-label {
             color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.95rem;
             margin-bottom: 10px;
-            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .stat-value {
-            font-size: 2.2rem;
+        .stat-label i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
             font-weight: 800;
             color: var(--white);
             margin-bottom: 10px;
         }
 
-        .stat-trend {
+        .stat-change {
             font-size: 0.85rem;
+            color: var(--success);
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        .stat-trend.up { color: var(--success); }
-        .stat-trend.down { color: var(--danger); }
-
-        /* CHARTS */
-        .charts-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .chart-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 15px;
-            animation: slideInUp 0.6s ease 0.2s both;
-        }
-
-        .chart-card h3 {
-            margin-bottom: 20px;
-            color: var(--white);
-            font-size: 1.3rem;
-        }
-
-        .chart-card canvas {
-            max-height: 300px;
-        }
-
-        /* ACTIVITY TABLE */
-        .activity-section {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 15px;
-            animation: slideInUp 0.6s ease 0.4s both;
-            margin-bottom: 50px;
-        }
-
-        .activity-section h3 {
-            margin-bottom: 20px;
-            color: var(--white);
-            font-size: 1.3rem;
-        }
-
-        .activity-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .activity-table th {
-            background: rgba(30, 144, 255, 0.1);
-            padding: 15px;
-            text-align: left;
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .activity-table td {
-            padding: 15px;
-            border-bottom: 1px solid var(--glass-border);
-            color: var(--text-light);
-        }
-
-        .activity-table tr:hover {
-            background: rgba(30, 144, 255, 0.05);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .badge.success {
-            background: rgba(37, 211, 102, 0.2);
-            color: var(--success);
-        }
-
-        .badge.pending {
-            background: rgba(255, 165, 0, 0.2);
-            color: var(--warning);
-        }
-
-        .badge.error {
-            background: rgba(255, 107, 107, 0.2);
+        .stat-change.negative {
             color: var(--danger);
         }
 
-        /* FOOTER */
-        footer {
-            text-align: center;
-            padding: 30px 5%;
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            margin-top: 60px;
-            background: linear-gradient(180deg, rgba(15, 23, 41, 0.5) 0%, rgba(15, 23, 41, 1) 100%);
+        /* CHARTS & ANALYTICS */
+        .analytics-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
         }
 
-        .footer-link {
-            color: var(--accent);
-            text-decoration: none;
+        .analytics-section h3 {
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .daily-visits {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .visit-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            min-width: 60px;
+        }
+
+        .visit-bar-fill {
+            width: 45px;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--light-blue) 100%);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            min-height: 5px;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .visit-bar-fill:hover {
+            transform: scaleY(1.1);
+        }
+
+        .visit-day {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .visit-count {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        /* SECTION TRACKING */
+        .section-tracking {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .section-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 12px;
             transition: all 0.3s ease;
         }
 
-        .footer-link:hover {
-            text-decoration: underline;
+        .section-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 25px var(--accent-glow);
+        }
+
+        .section-name {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .section-stats div {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .section-stats strong {
+            color: var(--white);
+            font-size: 1.3rem;
+        }
+
+        /* EDIT STATS */
+        .edit-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .edit-section h3 {
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .edit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .edit-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .edit-item label {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .edit-item input {
+            padding: 10px 12px;
+            background: rgba(30, 144, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .edit-item input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--success) 0%, #20BA5C 100%);
+            color: var(--white);
+            flex: 1;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-reset {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            flex: 1;
+        }
+
+        .btn-reset:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .success-message {
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            animation: slideInDown 0.3s ease;
+        }
+
+        .info-box {
+            background: rgba(30, 144, 255, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            font-size: 0.9rem;
         }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .login-box { padding: 30px; }
-            header {
+            .login-card {
+                padding: 30px;
+            }
+
+            .dashboard-header {
                 flex-direction: column;
                 gap: 15px;
-                padding: 15px 5%;
+                text-align: center;
             }
 
-            .container {
-                padding: 20px 5%;
-            }
-
-            h1 {
+            .dashboard-header h1 {
                 font-size: 1.8rem;
             }
 
-            .stats-grid {
+            .stats-overview {
                 grid-template-columns: 1fr;
             }
 
-            .charts-section {
+            .daily-visits {
+                justify-content: space-around;
+            }
+
+            .edit-grid {
                 grid-template-columns: 1fr;
             }
 
-            .activity-table {
-                font-size: 0.85rem;
+            .edit-buttons {
+                flex-direction: column;
             }
-
-            .activity-table th, .activity-table td {
-                padding: 10px;
-            }
-
-            .header-info {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        /* LOADING */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 300px;
-            color: var(--accent);
-        }
-
-        .loading i {
-            animation: spin 2s linear infinite;
-            font-size: 2.5rem;
-            margin-right: 15px;
         }
     </style>
 </head>
 <body>
-    <!-- LOGIN FORM -->
-    <div class="login-container" id="loginContainer">
-        <div class="login-box">
-            <h1>🔐 Admin Dashboard</h1>
-            <p>Accès réservé aux administrateurs</p>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" placeholder="Entrez le mot de passe" required>
-                </div>
-                <button type="submit" class="btn-login">Se Connecter</button>
-                <div class="error-msg" id="errorMsg">❌ Mot de passe incorrect</div>
-            </form>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage">
+        <div class="login-card">
+            <h2>🔐 Admin</h2>
+            <p>KIYOJO ACADÉMIA Analytics</p>
+            
+            <div class="error-message" id="errorMessage"></div>
+            
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" placeholder="Entrez le mot de passe admin" onkeypress="if(event.key === 'Enter') login()">
+            </div>
+            
+            <button class="login-btn" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> Se Connecter
+            </button>
         </div>
     </div>
 
-    <!-- DASHBOARD (Hidden by default) -->
-    <div class="admin-dashboard" id="dashboard">
-        <header>
-            <div class="logo">
-                <i class="fas fa-chart-line"></i> KIYOJO ADMIN
-            </div>
-            <div class="header-info">
-                <a href="https://wa.me/243827445800" target="_blank">
-                    <i class="fab fa-whatsapp"></i> Support
-                </a>
-                <a href="mailto:joe489581@gmail.com">
-                    <i class="fas fa-envelope"></i> Email
-                </a>
-                <a href="index.html">
-                    <i class="fas fa-home"></i> Retour Site
-                </a>
-                <a onclick="logout()" style="cursor: pointer; color: var(--danger);">
-                    <i class="fas fa-sign-out-alt"></i> Déconnexion
-                </a>
-            </div>
-        </header>
-
+    <!-- DASHBOARD -->
+    <div id="dashboard">
         <div class="container">
-            <h1>📊 Dashboard Analytics</h1>
-            <p class="subtitle">Statistiques et performances du site KIYOJO ACADÉMIA</p>
+            <!-- HEADER -->
+            <div class="dashboard-header">
+                <div>
+                    <h1>📊 Dashboard Admin</h1>
+                </div>
+                <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+            </div>
 
-            <!-- STATS -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-card-icon info"><i class="fas fa-eye"></i></div>
-                    <h3>Vues Totales</h3>
-                    <div class="stat-value" id="totalViews">-</div>
-                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +12% ce mois</div>
+            <!-- SUCCESS MESSAGE -->
+            <div class="success-message" id="successMessage"></div>
+
+            <!-- INFO BOX -->
+            <div class="info-box">
+                <p><strong>📱 Système de Tracking :</strong> Les visites sont enregistrées automatiquement quand quelqu'un accède au site.</p>
+                <p><strong>📅 Données :</strong> Nombre de visites par jour, section visualisée, et temps passé.</p>
+                <p><strong>⚙️ Édition :</strong> Vous pouvez modifier manuellement les statistiques ci-dessous.</p>
+            </div>
+
+            <!-- STATS OVERVIEW -->
+            <div class="stats-overview">
+                <div class="stat-box">
+                    <div class="stat-label">
+                        <i class="fas fa-users"></i> Clients Satisfaits
+                    </div>
+                    <div class="stat-number" id="clientsDisplay">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i> +<span id="clientsChange">0</span>
+                    </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-card-icon success"><i class="fas fa-mouse-pointer"></i></div>
-                    <h3>Clics Produits</h3>
-                    <div class="stat-value" id="totalClicks">-</div>
-                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +8% ce mois</div>
+                <div class="stat-box">
+                    <div class="stat-label">
+                        <i class="fas fa-briefcase"></i> Projets Réalisés
+                    </div>
+                    <div class="stat-number" id="projectsDisplay">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i> +<span id="projectsChange">0</span>
+                    </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-card-icon warning"><i class="fas fa-envelope"></i></div>
-                    <h3>Messages WhatsApp</h3>
-                    <div class="stat-value" id="whatsappMessages">-</div>
-                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +25% ce mois</div>
+                <div class="stat-box">
+                    <div class="stat-label">
+                        <i class="fas fa-mouse-pointer"></i> Visites Totales
+                    </div>
+                    <div class="stat-number" id="visitsDisplay">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i> +<span id="visitsChange">0</span> aujourd'hui
+                    </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-card-icon danger"><i class="fas fa-clock"></i></div>
-                    <h3>Temps Moyen</h3>
-                    <div class="stat-value">2m 34s</div>
-                    <div class="stat-trend down"><i class="fas fa-arrow-down"></i> -3% ce mois</div>
+                <div class="stat-box">
+                    <div class="stat-label">
+                        <i class="fas fa-calendar-alt"></i> Visites Aujourd'hui
+                    </div>
+                    <div class="stat-number" id="todayVisitsDisplay">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-clock"></i> <span id="lastVisitTime">Aucune visite</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- CHARTS -->
-            <div class="charts-section">
-                <div class="chart-card">
-                    <h3>📈 Visites par Jour (7 derniers jours)</h3>
-                    <canvas id="visitsChart"></canvas>
-                </div>
-
-                <div class="chart-card">
-                    <h3>🎯 Engagement par Section</h3>
-                    <canvas id="engagementChart"></canvas>
-                </div>
-
-                <div class="chart-card">
-                    <h3>📱 Traffic par Appareil</h3>
-                    <canvas id="deviceChart"></canvas>
-                </div>
-
-                <div class="chart-card">
-                    <h3>🌍 Top Pays</h3>
-                    <canvas id="countriesChart"></canvas>
-                </div>
+            <!-- DAILY VISITS CHART -->
+            <div class="analytics-section">
+                <h3><i class="fas fa-chart-bar"></i> Visites par Jour (7 derniers jours)</h3>
+                <div class="daily-visits" id="dailyVisitsChart"></div>
             </div>
 
-            <!-- ACTIVITY -->
-            <div class="activity-section">
-                <h3>📋 Activité Récente</h3>
-                <table class="activity-table">
-                    <thead>
-                        <tr>
-                            <th>Heure</th>
-                            <th>Action</th>
-                            <th>Utilisateur</th>
-                            <th>Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody id="activityTable">
-                        <tr>
-                            <td colspan="4" class="loading"><i class="fas fa-spinner"></i> Chargement...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- SECTIONS TRACKING -->
+            <div class="analytics-section">
+                <h3><i class="fas fa-location-dot"></i> Sections Visitées</h3>
+                <div class="section-tracking" id="sectionsTracking"></div>
+            </div>
+
+            <!-- EDIT STATISTICS -->
+            <div class="edit-section">
+                <h3><i class="fas fa-edit"></i> Modifier les Statistiques</h3>
+                
+                <div class="edit-grid">
+                    <div class="edit-item">
+                        <label for="editClients">Nombre de Clients :</label>
+                        <input type="number" id="editClients" min="0" placeholder="340">
+                    </div>
+                    <div class="edit-item">
+                        <label for="editProjects">Nombre de Projets :</label>
+                        <input type="number" id="editProjects" min="0" placeholder="207">
+                    </div>
+                </div>
+
+                <div class="edit-buttons">
+                    <button class="btn btn-save" onclick="saveStats()">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                    <button class="btn btn-reset" onclick="resetAllData()">
+                        <i class="fas fa-redo"></i> Réinitialiser Tout
+                    </button>
+                </div>
             </div>
         </div>
-
-        <footer>
-            <p>© 2024 KIYOJO ACADÉMIA | 
-                <a href="mailto:joe489581@gmail.com" class="footer-link">joe489581@gmail.com</a> | 
-                <a href="https://wa.me/243827445800" class="footer-link" target="_blank">+243 827 445 800</a>
-            </p>
-        </footer>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = 'Kiyojo2024'; // À modifier dans les paramètres secrets
+        // MDP ADMIN (À CHANGER)
+        const ADMIN_PASSWORD = "kiyojo2024";
 
-        function handleLogin(event) {
-            event.preventDefault();
+        // SECTIONS À TRACKER
+        const SECTIONS = ['hero', 'bio', 'services', 'reviews', 'stats', 'contact'];
+
+        // ========== AUTHENTIFICATION ==========
+        function login() {
             const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('errorMsg');
-
+            
             if (password === ADMIN_PASSWORD) {
-                sessionStorage.setItem('adminLogged', 'true');
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('dashboard').classList.add('active');
-                initDashboard();
-                errorMsg.classList.remove('show');
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadDashboard();
             } else {
-                errorMsg.classList.add('show');
+                const errorMsg = document.getElementById('errorMessage');
+                errorMsg.textContent = '❌ Mot de passe incorrect !';
+                errorMsg.style.display = 'block';
                 document.getElementById('password').value = '';
+                setTimeout(() => errorMsg.style.display = 'none', 3000);
             }
         }
 
         function logout() {
-            sessionStorage.removeItem('adminLogged');
-            document.getElementById('dashboard').classList.remove('active');
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('loginForm').reset();
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
         }
 
-        function checkAuth() {
-            if (sessionStorage.getItem('adminLogged') === 'true') {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('dashboard').classList.add('active');
-                initDashboard();
+        // ========== STORAGE ==========
+        function getAnalytics() {
+            const stored = localStorage.getItem('kiyojo_analytics');
+            if (!stored) {
+                return {
+                    clients: 0,
+                    projects: 0,
+                    totalVisits: 0,
+                    visitsHistory: {}, // {YYYY-MM-DD: count}
+                    sectionsViewed: {}, // {sectionName: count}
+                    lastVisit: null
+                };
+            }
+            return JSON.parse(stored);
+        }
+
+        function saveAnalytics(data) {
+            localStorage.setItem('kiyojo_analytics', JSON.stringify(data));
+        }
+
+        // ========== TRACKING (appelé depuis index.html) ==========
+        window.trackVisit = function(section = null) {
+            const analytics = getAnalytics();
+            const today = new Date().toISOString().split('T')[0];
+
+            // Enregistrer la visite du jour
+            if (!analytics.visitsHistory[today]) {
+                analytics.visitsHistory[today] = 0;
+            }
+            analytics.visitsHistory[today]++;
+            analytics.totalVisits++;
+            analytics.lastVisit = new Date().toLocaleString('fr-FR');
+
+            // Enregistrer la section visitée
+            if (section) {
+                if (!analytics.sectionsViewed[section]) {
+                    analytics.sectionsViewed[section] = 0;
+                }
+                analytics.sectionsViewed[section]++;
+            }
+
+            saveAnalytics(analytics);
+        };
+
+        // ========== DASHBOARD ==========
+        function loadDashboard() {
+            const analytics = getAnalytics();
+            
+            // Stats principales
+            document.getElementById('clientsDisplay').textContent = analytics.clients;
+            document.getElementById('projectsDisplay').textContent = analytics.projects;
+            document.getElementById('visitsDisplay').textContent = analytics.totalVisits;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayVisits = analytics.visitsHistory[today] || 0;
+            document.getElementById('todayVisitsDisplay').textContent = todayVisits;
+            document.getElementById('lastVisitTime').textContent = analytics.lastVisit || 'Aucune visite';
+
+            // Changes
+            document.getElementById('clientsChange').textContent = Math.max(0, analytics.clients - 340);
+            document.getElementById('projectsChange').textContent = Math.max(0, analytics.projects - 207);
+            document.getElementById('visitsChange').textContent = todayVisits;
+
+            // Remplir les champs d'édition
+            document.getElementById('editClients').value = analytics.clients;
+            document.getElementById('editProjects').value = analytics.projects;
+
+            // Chart des visites (7 derniers jours)
+            drawDailyVisitsChart(analytics.visitsHistory);
+
+            // Sections trackées
+            drawSectionsTracking(analytics.sectionsViewed);
+        }
+
+        function drawDailyVisitsChart(visitsHistory) {
+            const container = document.getElementById('dailyVisitsChart');
+            container.innerHTML = '';
+
+            // Générer les 7 derniers jours
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                days.push(date.toISOString().split('T')[0]);
+            }
+
+            const maxVisits = Math.max(...days.map(d => visitsHistory[d] || 0), 1);
+
+            days.forEach(day => {
+                const visits = visitsHistory[day] || 0;
+                const height = (visits / maxVisits) * 150 + 5;
+                const dayLabel = new Date(day + 'T00:00:00').toLocaleDateString('fr-FR', { weekday: 'short' });
+
+                const barHTML = `
+                    <div class="visit-bar">
+                        <div class="visit-bar-fill" style="height: ${height}px;" title="${visits} visites"></div>
+                        <div class="visit-count">${visits}</div>
+                        <div class="visit-day">${dayLabel}</div>
+                    </div>
+                `;
+                container.innerHTML += barHTML;
+            });
+        }
+
+        function drawSectionsTracking(sectionsViewed) {
+            const container = document.getElementById('sectionsTracking');
+            container.innerHTML = '';
+
+            if (Object.keys(sectionsViewed).length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Aucune section visitée pour le moment</p>';
+                return;
+            }
+
+            const totalViews = Object.values(sectionsViewed).reduce((a, b) => a + b, 0);
+
+            SECTIONS.forEach(section => {
+                const views = sectionsViewed[section] || 0;
+                const percentage = totalViews > 0 ? ((views / totalViews) * 100).toFixed(1) : 0;
+                const icon = getIconForSection(section);
+
+                const sectionHTML = `
+                    <div class="section-card">
+                        <div class="section-name">
+                            <i class="fas ${icon}"></i> ${section.charAt(0).toUpperCase() + section.slice(1)}
+                        </div>
+                        <div class="section-stats">
+                            <div>
+                                <span>Vues</span>
+                                <strong>${views}</strong>
+                            </div>
+                            <div style="text-align: right;">
+                                <span>%</span>
+                                <strong>${percentage}%</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += sectionHTML;
+            });
+        }
+
+        function getIconForSection(section) {
+            const icons = {
+                'hero': 'fa-rocket',
+                'bio': 'fa-user',
+                'services': 'fa-briefcase',
+                'reviews': 'fa-star',
+                'stats': 'fa-chart-bar',
+                'contact': 'fa-envelope'
+            };
+            return icons[section] || 'fa-circle';
+        }
+
+        // ========== ÉDITION STATS ==========
+        function saveStats() {
+            const clients = parseInt(document.getElementById('editClients').value) || 0;
+            const projects = parseInt(document.getElementById('editProjects').value) || 0;
+
+            const analytics = getAnalytics();
+            analytics.clients = clients;
+            analytics.projects = projects;
+            saveAnalytics(analytics);
+
+            // Message de succès
+            const successMsg = document.getElementById('successMessage');
+            successMsg.textContent = '✅ Statistiques mises à jour !';
+            successMsg.style.display = 'block';
+            setTimeout(() => successMsg.style.display = 'none', 3000);
+
+            // Recharger le dashboard
+            loadDashboard();
+        }
+
+        function resetAllData() {
+            if (confirm('⚠️ Êtes-vous sûr ? Cela effacera TOUTES les données de suivi.')) {
+                localStorage.removeItem('kiyojo_analytics');
+                document.getElementById('editClients').value = '';
+                document.getElementById('editProjects').value = '';
+                
+                const successMsg = document.getElementById('successMessage');
+                successMsg.textContent = '🔄 Toutes les données ont été réinitialisées.';
+                successMsg.style.display = 'block';
+                setTimeout(() => successMsg.style.display = 'none', 3000);
+
+                loadDashboard();
             }
         }
-
-        function initDashboard() {
-            const mockData = {
-                views: Math.floor(Math.random() * 5000) + 2000,
-                clicks: Math.floor(Math.random() * 500) + 100,
-                whatsapp: Math.floor(Math.random() * 150) + 30,
-                activities: [
-                    { time: '14:32', action: 'Consulté Produits', user: 'Visiteur 1', status: 'success' },
-                    { time: '14:15', action: 'Cliqué WhatsApp', user: 'Visiteur 2', status: 'success' },
-                    { time: '13:48', action: 'Visité Services', user: 'Visiteur 3', status: 'success' },
-                    { time: '13:22', action: 'Message Email', user: 'Visiteur 4', status: 'pending' },
-                    { time: '12:55', action: 'Enregistrement', user: 'Visiteur 5', status: 'success' },
-                    { time: '12:30', action: 'Formulaire Envoyé', user: 'Visiteur 6', status: 'success' },
-                    { time: '12:10', action: 'Visite Bio', user: 'Visiteur 7', status: 'success' },
-                    { time: '11:45', action: 'Consulté Produits', user: 'Visiteur 8', status: 'success' },
-                ]
-            };
-
-            document.getElementById('totalViews').textContent = mockData.views.toLocaleString();
-            document.getElementById('totalClicks').textContent = mockData.clicks.toLocaleString();
-            document.getElementById('whatsappMessages').textContent = mockData.whatsapp.toLocaleString();
-
-            const tbody = document.getElementById('activityTable');
-            tbody.innerHTML = mockData.activities.map(act => `
-                <tr>
-                    <td>${act.time}</td>
-                    <td>${act.action}</td>
-                    <td>${act.user}</td>
-                    <td><span class="badge ${act.status}">${act.status === 'success' ? '✓ Succès' : act.status === 'pending' ? '⏳ En attente' : '✗ Erreur'}</span></td>
-                </tr>
-            `).join('');
-
-            createCharts();
-        }
-
-        function createCharts() {
-            const chartConfig = {
-                plugins: {
-                    legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } }
-                },
-                scales: {
-                    y: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } },
-                    x: { ticks: { color: 'rgba(232, 236, 239, 0.8)' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
-                }
-            };
-
-            new Chart(document.getElementById('visitsChart'), {
-                type: 'line',
-                data: {
-                    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-                    datasets: [{
-                        label: 'Visites',
-                        data: [320, 480, 420, 580, 490, 720, 650],
-                        borderColor: '#1E90FF',
-                        backgroundColor: 'rgba(30, 144, 255, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: chartConfig
-            });
-
-            new Chart(document.getElementById('engagementChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Produits', 'Services', 'Bio', 'Contact', 'Autres'],
-                    datasets: [{
-                        data: [35, 25, 20, 15, 5],
-                        backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF', '#25D366', '#FFA500']
-                    }]
-                },
-                options: { plugins: { legend: { labels: { color: 'rgba(232, 236, 239, 0.8)' } } } }
-            });
-
-            new Chart(document.getElementById('deviceChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Mobile', 'Desktop', 'Tablet'],
-                    datasets: [{
-                        label: 'Visites',
-                        data: [2400, 1800, 600],
-                        backgroundColor: ['#1E90FF', '#3DA5FF', '#00D4FF']
-                    }]
-                },
-                options: chartConfig
-            });
-
-            new Chart(document.getElementById('countriesChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['RDC', 'Burundi', 'Uganda', 'Kenya', 'Autres'],
-                    datasets: [{
-                        label: 'Visites',
-                        data: [3200, 1800, 1200, 800, 1000],
-                        backgroundColor: '#1E90FF'
-                    }]
-                },
-                options: chartConfig
-            });
-        }
-
-        window.addEventListener('load', checkAuth);
     </script>
 </body>
 </html>
